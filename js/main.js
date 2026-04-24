@@ -96,8 +96,43 @@ document.addEventListener('DOMContentLoaded', () => {
                     item.classList.add('hidden');
                 }
             });
-        });
     });
+
+    // Sanity CMS Integration for Portfolio
+    const portfolioGrid = document.querySelector('.portfolio-grid');
+    if (portfolioGrid) {
+        const PROJECT_ID = 'x3rb0ahu';
+        const DATASET = 'production';
+        const QUERY = encodeURIComponent('*[_type == "portfolioItem"]{title, category, "imageUrl": image.asset->url, description}');
+        const URL = `https://${PROJECT_ID}.api.sanity.io/v2023-01-01/data/query/${DATASET}?query=${QUERY}`;
+
+        fetch(URL)
+            .then(res => res.json())
+            .then(({ result }) => {
+                if (result && result.length > 0) {
+                    portfolioGrid.innerHTML = ''; // Clear hardcoded items
+                    result.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'portfolio-item';
+                        div.setAttribute('data-category', item.category.toLowerCase());
+                        
+                        div.innerHTML = `
+                            <img src="${item.imageUrl}" alt="${item.title}">
+                            <div class="portfolio-overlay">
+                                <h3>${item.title}</h3>
+                                <p>${item.description || item.category}</p>
+                            </div>
+                        `;
+                        portfolioGrid.appendChild(div);
+                    });
+                    
+                    // Re-apply filter logic to new items
+                    const activeFilter = document.querySelector('.filter-btn.active');
+                    if(activeFilter) activeFilter.click();
+                }
+            })
+            .catch(err => console.error("Sanity Fetch Error:", err));
+    }
 
     // Contact Form Logic
     const contactForm = document.getElementById('contactForm');
@@ -112,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const formData = new FormData(contactForm);
             
-            fetch("https://formsubmit.co/ajax/udaracreationsltd@gmail.com", {
+            fetch("https://api.web3forms.com/submit", {
                 method: "POST",
                 body: formData
             })
