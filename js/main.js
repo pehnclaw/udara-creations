@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     item.classList.add('hidden');
                 }
             });
+        });
     });
 
     // Sanity CMS Integration for Portfolio
