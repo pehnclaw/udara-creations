@@ -923,6 +923,11 @@ footer {
         text-align: center;
     }
 
+    .dropdown > a {
+        justify-content: center;
+        width: 100%;
+    }
+
     .dropdown-menu {
         position: static !important;
         max-height: 0;
