@@ -7,6 +7,16 @@ const headEnd = indexHtml.indexOf('<main>');
 const footerStart = indexHtml.indexOf('<footer id="contact">');
 
 let header = indexHtml.substring(0, headEnd) + '<main>\n';
+// Inject preloader into generated pages
+header = header.replace('<body>', `<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <img src="assets/logo.png" alt="Udara Creations" class="preloader-logo">
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>`);
+
 let footer = '\n    </main>\n' + indexHtml.substring(footerStart);
 
 const pages = {

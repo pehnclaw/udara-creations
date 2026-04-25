@@ -61,6 +61,14 @@
     </style>
 </head>
 <body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <img src="assets/logo.png" alt="Udara Creations" class="preloader-logo">
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
     <div class="error-container">
         <div class="error-icon"><i class="ph ph-compass"></i></div>
         <div class="error-code">404</div>
@@ -73,6 +81,17 @@
         // Set theme on load
         const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Hide preloader
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.classList.add('fade-out');
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 800);
+            }
+        });
     </script>
 </body>
 </html>

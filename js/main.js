@@ -329,6 +329,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Preloader Hiding Logic
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            preloader.classList.add('fade-out');
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 800);
+        }
+    });
+
     // 3D Tilt Effect for Service Cards
     const cards = document.querySelectorAll('.service-card');
     cards.forEach(card => {
