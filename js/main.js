@@ -58,11 +58,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Mobile Dropdown Clicks
     const dropdowns = document.querySelectorAll('.dropdown');
     dropdowns.forEach(dropdown => {
-        dropdown.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768) {
-                dropdown.classList.toggle('active');
-            }
-        });
+        const toggleLink = dropdown.querySelector('a');
+        if (toggleLink) {
+            toggleLink.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault(); // Prevent jump to #services anchor
+                    dropdown.classList.toggle('active');
+                }
+            });
+        }
     });
 
     // Scroll Animations using Intersection Observer

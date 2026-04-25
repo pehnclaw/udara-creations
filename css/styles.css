@@ -900,7 +900,12 @@ footer {
     }
 
     .dropdown.active .dropdown-menu {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-light);
     }
 
     .mobile-toggle {
