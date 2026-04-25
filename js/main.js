@@ -33,6 +33,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update Copyright Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
+    // Sanity CMS Hero Settings
+    async function fetchHeroSettings() {
+        const PROJECT_ID = 'x3rb0ahu';
+        const DATASET = 'production';
+        const QUERY = encodeURIComponent('*[_type == "pageHome"][0] { "heroImageUrl": heroImage.asset->url, heroTitle, heroSubtitle }');
+        const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2023-01-01/data/query/${DATASET}?query=${QUERY}`;
+
+        try {
+            const res = await fetch(URL);
+            const { result } = await res.json();
+
+            if (result) {
+                const heroSection = document.querySelector('.hero');
+                if (result.heroImageUrl && heroSection) {
+                    // Update only the image; CSS handles the overlay and parallax
+                    heroSection.style.backgroundImage = `url('${result.heroImageUrl}')`;
+                }
+                if (result.heroTitle) {
+                    const titleEl = document.querySelector('.hero-title');
+                    if (titleEl) titleEl.innerHTML = result.heroTitle;
+                }
+                if (result.heroSubtitle) {
+                    const subtitleEl = document.querySelector('.hero-subtitle');
+                    if (subtitleEl) subtitleEl.textContent = result.heroSubtitle;
+                }
+            }
+        } catch (err) {
+            console.log('Hero fetch failed:', err);
+        }
+    }
+    fetchHeroSettings();
+
     // Navbar Scroll Effect
     const navbar = document.querySelector('.navbar');
     window.addEventListener('scroll', () => {

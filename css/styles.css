@@ -319,7 +319,7 @@ ul {
    ========================================= */
 .hero {
     position: relative;
-    min-height: 100vh;
+    min-height: 85vh; /* Reduced from 100vh to tighten space */
     display: flex;
     align-items: center;
     justify-content: center;
