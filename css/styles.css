@@ -1363,3 +1363,214 @@ footer {
     50% { left: 0; }
     100% { left: 100%; }
 }
+
+/* =========================================
+   WhatsApp Float
+   ========================================= */
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #25d366;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    transition: var(--transition-smooth);
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    background-color: #128c7e;
+    color: #FFF;
+}
+
+.whatsapp-tooltip {
+    position: absolute;
+    right: 70px;
+    background: #25d366;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px);
+    transition: var(--transition-smooth);
+}
+
+.whatsapp-float:hover .whatsapp-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+/* =========================================
+   FAQ Section
+   ========================================= */
+.faq-section {
+    padding: var(--section-pad);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-container {
+    margin-top: 3rem;
+}
+
+.faq-item {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 15px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: var(--transition-smooth);
+}
+
+.faq-item:hover {
+    border-color: var(--primary);
+}
+
+.faq-question {
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: var(--font-heading);
+    color: var(--text-heading);
+}
+
+.faq-answer {
+    padding: 0 2rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+    color: var(--text-muted);
+}
+
+.faq-item.active .faq-answer {
+    max-height: 1000px;
+    padding: 0 2rem 1.5rem;
+    transition: all 0.5s cubic-bezier(1, 0, 1, 0);
+}
+
+.faq-icon {
+    font-size: 1.2rem;
+    transition: var(--transition-smooth);
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(180deg);
+    color: var(--primary);
+}
+
+/* =========================================
+   Modal Styles
+   ========================================= */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(9, 10, 21, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition-smooth);
+    padding: 2rem;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    max-width: 1000px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    transform: scale(0.9);
+    transition: var(--transition-smooth);
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 2rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    z-index: 10;
+    transition: var(--transition-smooth);
+}
+
+.close-modal:hover {
+    color: var(--primary);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .modal-body {
+        grid-template-columns: 1.2fr 1fr;
+    }
+}
+
+.modal-body img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modal-text {
+    padding: 3rem;
+}
+
+.modal-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.modal-text .highlight {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2rem;
+    display: block;
+}
+
+.modal-text p {
+    line-height: 1.8;
+    color: var(--text-muted);
+}

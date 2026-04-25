@@ -7,7 +7,15 @@ const headEnd = indexHtml.indexOf('<main>');
 const footerStart = indexHtml.indexOf('<footer id="contact">');
 
 let header = indexHtml.substring(0, headEnd) + '<main>\n';
-let footer = '\n    </main>\n' + indexHtml.substring(footerStart);
+let footer = `
+    </main>
+    
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/2347042772050" class="whatsapp-float" target="_blank" aria-label="Chat on WhatsApp">
+        <i class="ph ph-whatsapp-logo"></i>
+        <span class="whatsapp-tooltip">Chat with us</span>
+    </a>
+` + indexHtml.substring(footerStart);
 
 const pages = {
     'portfolio.html': `
@@ -46,6 +54,21 @@ const pages = {
                 </div>
             </div>
         </section>
+
+        <!-- Portfolio Modal -->
+        <div id="portfolioModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <div class="modal-body">
+                    <img id="modalImg" src="" alt="">
+                    <div class="modal-text">
+                        <h2 id="modalTitle">Project Title</h2>
+                        <p id="modalCategory" class="highlight"></p>
+                        <p id="modalDesc"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     `,
     'software.html': `
         <section class="internal-hero">
@@ -508,11 +531,9 @@ const pages = {
                 <h2>Our <span class="highlight">Mission</span></h2>
                 <p>Breaking dimensions and redefining excellence in the digital age.</p>
             </div>
-            <div class="about-container" style="margin-top: 4rem;">
-                <div class="about-content">
-                    <p>Founded on the principle of integrated innovation, Udara Creations brings together the brightest minds in software engineering, brand strategy, creative media, and business consultation. We believe that the best solutions are born at the intersection of different disciplines.</p>
-                    <p>Our goal is to empower businesses and individuals by providing high-fidelity digital products, stunning visual identities, and practical skill acquisition programs that drive sustainable growth in a rapidly evolving global economy.</p>
-                </div>
+            <div class="about-page-container" style="max-width: 800px; margin: 4rem auto 0; text-align: center; padding: 0 2rem;">
+                <p style="font-size: 1.2rem; line-height: 1.8; color: var(--text-main); margin-bottom: 2rem;">Founded on the principle of integrated innovation, Udara Creations brings together the brightest minds in software engineering, brand strategy, creative media, and business consultation.</p>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-muted);">We believe that the best solutions are born at the intersection of different disciplines. Our goal is to empower businesses and individuals by providing high-fidelity digital products, stunning visual identities, and practical skill acquisition programs that drive sustainable growth in a rapidly evolving global economy.</p>
             </div>
         </section>
 

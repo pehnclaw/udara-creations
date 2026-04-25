@@ -193,11 +193,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         const div = document.createElement('div');
                         div.className = 'portfolio-item';
                         div.setAttribute('data-category', (item.category || 'other').toLowerCase());
+                        div.setAttribute('data-description', item.description || '');
                         div.innerHTML = `
                             <img src="${item.imageUrl}" alt="${item.title}" loading="lazy">
                             <div class="portfolio-overlay">
                                 <h3>${item.title}</h3>
-                                <p>${item.description || item.category}</p>
+                                <p>${item.category}</p>
                             </div>
                         `;
                         portfolioGrid.appendChild(div);
@@ -208,6 +209,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .catch(err => console.warn('Portfolio fetch failed, showing placeholders.', err));
+    }
+
+    // Portfolio Modal Logic
+    const modal = document.getElementById('portfolioModal');
+    if (modal) {
+        const closeModal = modal.querySelector('.close-modal');
+        
+        document.addEventListener('click', (e) => {
+            const item = e.target.closest('.portfolio-item');
+            if (item) {
+                const img = item.querySelector('img').src;
+                const title = item.querySelector('h3').textContent;
+                const category = item.querySelector('p').textContent;
+                const desc = item.getAttribute('data-description') || "Experience the dimension of innovation with Udara Creations. This project represents our commitment to precision and creative excellence.";
+
+                const modalImg = document.getElementById('modalImg');
+                const modalTitle = document.getElementById('modalTitle');
+                const modalCategory = document.getElementById('modalCategory');
+                const modalDesc = document.getElementById('modalDesc');
+
+                if (modalImg) modalImg.src = img;
+                if (modalTitle) modalTitle.textContent = title;
+                if (modalCategory) modalCategory.textContent = category;
+                if (modalDesc) modalDesc.textContent = desc;
+
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+
+        if (closeModal) {
+            closeModal.addEventListener('click', () => {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
     }
 
     // Testimonials Carousel
@@ -358,5 +402,22 @@ document.addEventListener('DOMContentLoaded', () => {
         card.addEventListener('mouseleave', () => {
             card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
         });
+    });
+
+    // FAQ Accordion Logic
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        if (question) {
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                // Close all other items
+                faqItems.forEach(i => i.classList.remove('active'));
+                // Toggle current item
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        }
     });
 });
