@@ -1225,3 +1225,24 @@ footer {
         font-size: 2.2rem;
     }
 }
+
+/* =========================================
+   Reveal Animations
+   ========================================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .reveal {
+        transition-duration: 0.8s;
+        transform: translateY(20px);
+    }
+}

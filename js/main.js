@@ -94,9 +94,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
-    // Observe elements for animation
-    const animatedElements = document.querySelectorAll('.service-card, .about-content, .about-visual');
-    animatedElements.forEach(el => observer.observe(el));
+    // Scroll Reveal Animation Logic
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    // Auto-apply reveal class to sections and key cards
+    const revealElements = document.querySelectorAll('section, .service-card, .capability-card, .process-step, .portfolio-item, .testimonial-card');
+    revealElements.forEach(el => {
+        el.classList.add('reveal');
+        revealObserver.observe(el);
+    });
+
+    // Observe elements for 3D/Hover effects (Centralized)
+    const animatedElements = document.querySelectorAll('.about-content, .about-visual');
+    animatedElements.forEach(el => revealObserver.observe(el));
 
     // Portfolio Filter Logic
     const filterBtns = document.querySelectorAll('.filter-btn');
