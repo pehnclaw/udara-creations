@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://udaracreations.com/sitemap.xml
+
+# Disallow internal studio files if any
+Disallow: /studio/
+Disallow: /node_modules/
