@@ -109,34 +109,21 @@ document.addEventListener('DOMContentLoaded', () => {
         rootMargin: "0px 0px -50px 0px"
     };
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                // Determine actual DOM index for stagger effect within siblings
-                const parent = entry.target.parentElement;
-                const children = Array.from(parent.children);
-                const itemIndex = children.indexOf(entry.target);
-                
-                setTimeout(() => {
-                    entry.target.classList.add('visible');
-                }, itemIndex * 150); // 150ms staggered delay
-                
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Scroll Reveal Animation Logic
+    // Scroll Reveal Animation Logic (Consolidated)
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
+                revealObserver.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.1 });
+    }, { 
+        threshold: 0, // Trigger immediately
+        rootMargin: "0px 0px -50px 0px"
+    });
 
     // Auto-apply reveal class to sections and key cards
-    const revealElements = document.querySelectorAll('section, .service-card, .capability-card, .process-step, .portfolio-item, .testimonial-card');
+    const revealElements = document.querySelectorAll('section:not(.hero), .service-card, .capability-card, .process-step, .portfolio-item, .testimonial-card, .about-content, .about-visual');
     revealElements.forEach(el => {
         el.classList.add('reveal');
         revealObserver.observe(el);

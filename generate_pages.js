@@ -506,6 +506,60 @@ const pages = {
             <p>Schedule a strategy session today and take the first step towards optimized business performance.</p>
             <a href="#contact" class="btn-primary" style="margin-top: 2rem;">Book a Consultation</a>
         </section>
+    `,
+    'about.html': `
+        <section class="internal-hero">
+            <h1>Who <span class="highlight">We Are</span></h1>
+            <p>Udara Creations is more than an agency—we are a multidisciplinary hub where innovation meets execution.</p>
+        </section>
+
+        <section class="service-intro">
+            <div class="section-header">
+                <h2>Our <span class="highlight">Mission</span></h2>
+                <p>Breaking dimensions and redefining excellence in the digital age.</p>
+            </div>
+            <div class="about-container" style="margin-top: 4rem;">
+                <div class="about-content">
+                    <p>Founded on the principle of integrated innovation, Udara Creations brings together the brightest minds in software engineering, brand strategy, creative media, and business consultation. We believe that the best solutions are born at the intersection of different disciplines.</p>
+                    <p>Our goal is to empower businesses and individuals by providing high-fidelity digital products, stunning visual identities, and practical skill acquisition programs that drive sustainable growth in a rapidly evolving global economy.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="process-section">
+            <div class="section-header">
+                <h2>Our <span class="highlight">Core</span> Values</h2>
+                <p>The principles that guide every project we undertake.</p>
+            </div>
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <i class="ph ph-target"></i>
+                    <h3>Precision</h3>
+                    <p>We believe in meticulous attention to detail, from the first line of code to the final frame of a cinematic production.</p>
+                </div>
+                <div class="capability-card">
+                    <i class="ph ph-lightbulb"></i>
+                    <h3>Innovation</h3>
+                    <p>We don't just follow trends; we create them by constantly exploring new technologies and creative boundaries.</p>
+                </div>
+                <div class="capability-card">
+                    <i class="ph ph-shield-check"></i>
+                    <h3>Integrity</h3>
+                    <p>Transparency and honesty are at the heart of our relationships with clients, partners, and our community.</p>
+                </div>
+                <div class="capability-card">
+                    <i class="ph ph-globe"></i>
+                    <h3>Global Vision</h3>
+                    <p>Based in Abuja, we build solutions that compete on the global stage, bridging the gap between local talent and international standards.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="service-cta">
+            <h2>Partner with <span class="highlight">Excellence.</span></h2>
+            <p>Ready to take your project to the next dimension? Let's talk.</p>
+            <a href="#contact" class="btn-primary" style="margin-top: 2rem;">Get in Touch</a>
+        </section>
     `
 };
 
@@ -533,8 +587,11 @@ for (const [filename, content] of Object.entries(pages)) {
     } else if (filename === 'portfolio.html') {
         pageHeader = pageHeader.replace('<title>Udara Creations | Premium Digital Solutions & Innovation</title>', '<title>Our Portfolio | Showcase of Creative Excellence | Udara Creations</title>');
         pageHeader = pageHeader.replace('Udara Creations is a multidisciplinary hub in Abuja offering high-end Branding, Software Development, Creative Media, and Strategic Consultation.', 'Explore our latest work in software development, cinematic media, premium branding, and strategic marketing campaigns.');
+    } else if (filename === 'about.html') {
+        pageHeader = pageHeader.replace('<title>Udara Creations | Premium Digital Solutions & Innovation</title>', '<title>About Us | The Vision Behind Udara Creations</title>');
+        pageHeader = pageHeader.replace('Udara Creations is a multidisciplinary hub in Abuja offering high-end Branding, Software Development, Creative Media, and Strategic Consultation.', 'Discover the mission, values, and story of Udara Creations—Abuja\'s leading multidisciplinary agency.');
     }
 
     fs.writeFileSync(filename, pageHeader + content + footer);
 }
-console.log("Generated 7 files successfully with unique SEO tags.");
+console.log(`Generated ${Object.keys(pages).length} files successfully with unique SEO tags.`);

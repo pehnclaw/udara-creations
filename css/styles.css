@@ -410,6 +410,13 @@ ul {
     padding: var(--section-pad);
     max-width: var(--max-width);
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* Ensure sections are visible even if JS reveal fails */
+section:not(.hero) {
+    min-height: 10vh;
 }
 
 .about-container {
