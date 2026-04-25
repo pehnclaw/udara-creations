@@ -109,9 +109,9 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.classList.add('active');
 
             const filterValue = btn.getAttribute('data-filter');
-
-            // Query items fresh each time (they may have been replaced by Sanity)
+            // Re-select items inside the listener to include Sanity-fetched items
             const currentItems = document.querySelectorAll('.portfolio-item');
+
             currentItems.forEach(item => {
                 if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
                     item.classList.remove('hidden');
