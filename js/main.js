@@ -126,21 +126,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if (portfolioGrid) {
         const PROJECT_ID = 'x3rb0ahu';
         const DATASET = 'production';
-        const QUERY = encodeURIComponent('*[_type == "portfolioItem"]{title, category, "imageUrl": image.asset->url, description}');
-        const URL = `https://${PROJECT_ID}.api.sanity.io/v2023-01-01/data/query/${DATASET}?query=${QUERY}`;
+        // Use CDN API for better reliability
+        const QUERY = encodeURIComponent('*[_type == "portfolioItem"] | order(_createdAt desc) {title, category, "imageUrl": image.asset->url, description}');
+        const SANITY_URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2023-01-01/data/query/${DATASET}?query=${QUERY}`;
 
-        fetch(URL)
-            .then(res => res.json())
+        fetch(SANITY_URL)
+            .then(res => {
+                if (!res.ok) throw new Error(`Sanity API error: ${res.status}`);
+                return res.json();
+            })
             .then(({ result }) => {
                 if (result && result.length > 0) {
-                    portfolioGrid.innerHTML = ''; // Clear hardcoded items
+                    portfolioGrid.innerHTML = '';
                     result.forEach(item => {
                         const div = document.createElement('div');
                         div.className = 'portfolio-item';
-                        div.setAttribute('data-category', item.category.toLowerCase());
-                        
+                        div.setAttribute('data-category', (item.category || 'other').toLowerCase());
                         div.innerHTML = `
-                            <img src="${item.imageUrl}" alt="${item.title}">
+                            <img src="${item.imageUrl}" alt="${item.title}" loading="lazy">
                             <div class="portfolio-overlay">
                                 <h3>${item.title}</h3>
                                 <p>${item.description || item.category}</p>
@@ -148,13 +151,85 @@ document.addEventListener('DOMContentLoaded', () => {
                         `;
                         portfolioGrid.appendChild(div);
                     });
-                    
-                    // Re-apply filter logic to new items
+                    // Re-apply active filter
                     const activeFilter = document.querySelector('.filter-btn.active');
-                    if(activeFilter) activeFilter.click();
+                    if (activeFilter) activeFilter.click();
                 }
             })
-            .catch(err => console.error("Sanity Fetch Error:", err));
+            .catch(err => console.warn('Portfolio fetch failed, showing placeholders.', err));
+    }
+
+    // Testimonials Carousel
+    const track = document.getElementById('testimonialsTrack');
+    const dotsContainer = document.getElementById('carouselDots');
+    if (track) {
+        // Try fetching testimonials from Sanity
+        const T_QUERY = encodeURIComponent('*[_type == "testimonial"] | order(_createdAt desc) {quote, name, role, initials}');
+        const T_URL = `https://x3rb0ahu.apicdn.sanity.io/v2023-01-01/data/query/production?query=${T_QUERY}`;
+
+        fetch(T_URL)
+            .then(res => res.json())
+            .then(({ result }) => {
+                if (result && result.length > 0) {
+                    track.innerHTML = '';
+                    result.forEach(t => {
+                        const card = document.createElement('div');
+                        card.className = 'testimonial-card';
+                        card.innerHTML = `
+                            <div class="quote-mark">&ldquo;</div>
+                            <p class="testimonial-text">${t.quote}</p>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">${t.initials || t.name[0]}</div>
+                                <div class="author-info">
+                                    <h4>${t.name}</h4>
+                                    <span>${t.role}</span>
+                                </div>
+                            </div>
+                        `;
+                        track.appendChild(card);
+                    });
+                }
+                initCarousel();
+            })
+            .catch(() => initCarousel());
+    }
+
+    function initCarousel() {
+        const track = document.getElementById('testimonialsTrack');
+        const dotsContainer = document.getElementById('carouselDots');
+        if (!track) return;
+
+        const cards = track.querySelectorAll('.testimonial-card');
+        if (cards.length === 0) return;
+
+        let current = 0;
+        let autoplay;
+
+        // Build dots
+        dotsContainer.innerHTML = '';
+        cards.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+            dot.addEventListener('click', () => goTo(i));
+            dotsContainer.appendChild(dot);
+        });
+
+        function goTo(index) {
+            cards[current].classList.remove('active');
+            dotsContainer.querySelectorAll('.carousel-dot')[current].classList.remove('active');
+            current = (index + cards.length) % cards.length;
+            cards[current].classList.add('active');
+            dotsContainer.querySelectorAll('.carousel-dot')[current].classList.add('active');
+        }
+
+        // Activate first card
+        cards[0].classList.add('active');
+
+        document.getElementById('nextBtn')?.addEventListener('click', () => { clearInterval(autoplay); goTo(current + 1); startAuto(); });
+        document.getElementById('prevBtn')?.addEventListener('click', () => { clearInterval(autoplay); goTo(current - 1); startAuto(); });
+
+        function startAuto() { autoplay = setInterval(() => goTo(current + 1), 5000); }
+        startAuto();
     }
 
     // Contact Form Logic
