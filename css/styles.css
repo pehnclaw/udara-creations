@@ -871,10 +871,12 @@ footer {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
+        padding: 6rem 2rem 2rem 2rem;
         gap: 2rem;
         transition: right 0.4s ease;
         z-index: 99;
+        overflow-y: auto;
     }
     
     .nav-links.nav-active {
@@ -906,6 +908,11 @@ footer {
         margin-top: 1rem;
         padding-top: 1rem;
         border-top: 1px solid var(--border-light);
+    }
+    
+    .dropdown-menu a {
+        font-size: 1.2rem !important;
+        color: var(--text-muted);
     }
 
     .mobile-toggle {
