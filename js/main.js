@@ -41,12 +41,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Mobile Menu Toggle (Basic implementation)
+    // Mobile Menu Toggle
     const mobileToggle = document.querySelector('.mobile-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    const mobileIcon = mobileToggle.querySelector('i');
+
     mobileToggle.addEventListener('click', () => {
-        // Here you would typically toggle a class on the nav-links
-        // For V1, we can alert or add a simple slide-down menu
-        alert("Mobile menu clicked! In a full implementation, this opens a mobile-optimized overlay.");
+        navLinks.classList.toggle('nav-active');
+        if (navLinks.classList.contains('nav-active')) {
+            mobileIcon.classList.replace('ph-list', 'ph-x');
+        } else {
+            mobileIcon.classList.replace('ph-x', 'ph-list');
+        }
+    });
+
+    // Handle Mobile Dropdown Clicks
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        dropdown.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                dropdown.classList.toggle('active');
+            }
+        });
     });
 
     // Scroll Animations using Intersection Observer
@@ -154,11 +170,17 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => response.json())
             .then(data => {
-                btn.textContent = 'Message Sent Successfully!';
-                btn.style.backgroundColor = 'var(--accent-green)';
-                btn.style.color = '#000';
-                btn.style.opacity = '1';
-                contactForm.reset();
+                if (data.success) {
+                    btn.textContent = 'Message Sent Successfully!';
+                    btn.style.backgroundColor = 'var(--accent-green)';
+                    btn.style.color = '#000';
+                    btn.style.opacity = '1';
+                    contactForm.reset();
+                } else {
+                    btn.textContent = data.message || 'Error Sending!';
+                    btn.style.backgroundColor = 'var(--accent-orange)';
+                    btn.style.opacity = '1';
+                }
                 
                 setTimeout(() => {
                     btn.textContent = originalText;
