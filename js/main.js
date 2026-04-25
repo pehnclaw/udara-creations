@@ -100,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Portfolio Filter Logic
     const filterBtns = document.querySelectorAll('.filter-btn');
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
 
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -111,7 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const filterValue = btn.getAttribute('data-filter');
 
-            portfolioItems.forEach(item => {
+            // Query items fresh each time (they may have been replaced by Sanity)
+            const currentItems = document.querySelectorAll('.portfolio-item');
+            currentItems.forEach(item => {
                 if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
                     item.classList.remove('hidden');
                 } else {
