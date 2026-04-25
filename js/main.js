@@ -1,3 +1,18 @@
+// Global Preloader Hiding Logic (runs immediately)
+function hidePreloader() {
+    const preloader = document.getElementById('preloader');
+    if (preloader && !preloader.classList.contains('fade-out')) {
+        preloader.classList.add('fade-out');
+        setTimeout(() => {
+            preloader.style.display = 'none';
+        }, 800);
+    }
+}
+
+// Safety fallback: Hide preloader after 3 seconds regardless of load state
+setTimeout(hidePreloader, 3000);
+window.addEventListener('load', hidePreloader);
+
 document.addEventListener('DOMContentLoaded', () => {
     // Theme Toggle Logic
     const themeToggle = document.getElementById('theme-toggle');
@@ -315,17 +330,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-
-    // Preloader Hiding Logic
-    window.addEventListener('load', () => {
-        const preloader = document.getElementById('preloader');
-        if (preloader) {
-            preloader.classList.add('fade-out');
-            setTimeout(() => {
-                preloader.style.display = 'none';
-            }, 800);
-        }
-    });
 
     // 3D Tilt Effect for Service Cards
     const cards = document.querySelectorAll('.service-card');
