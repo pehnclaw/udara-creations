@@ -566,6 +566,20 @@ const pages = {
             </div>
         </section>
 
+        <!-- Team Section -->
+        <section class="team-section">
+            <div class="section-header">
+                <h2>Meet the <span class="highlight">Management</span></h2>
+                <p>The visionaries and specialists driving Udara Creations forward.</p>
+            </div>
+            <div id="teamGrid" class="team-grid">
+                <!-- Dynamic team members from Sanity -->
+                <div class="team-card-skeleton"></div>
+                <div class="team-card-skeleton"></div>
+                <div class="team-card-skeleton"></div>
+            </div>
+        </section>
+
         <section class="service-cta">
             <h2>Partner with <span class="highlight">Excellence.</span></h2>
             <p>Ready to take your project to the next dimension? Let's talk.</p>

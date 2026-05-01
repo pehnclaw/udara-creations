@@ -420,4 +420,52 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    // Sanity CMS Integration for Team (About Page)
+    const teamGrid = document.getElementById('teamGrid');
+    if (teamGrid) {
+        const PROJECT_ID = 'x3rb0ahu';
+        const DATASET = 'production';
+        const QUERY = encodeURIComponent('*[_type == "teamMember"] | order(order asc) {name, role, bio, "imageUrl": image.asset->url, socials}');
+        const SANITY_URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2023-01-01/data/query/${DATASET}?query=${QUERY}`;
+
+        fetch(SANITY_URL)
+            .then(res => res.json())
+            .then(({ result }) => {
+                if (result && result.length > 0) {
+                    teamGrid.innerHTML = '';
+                    result.forEach(member => {
+                        const card = document.createElement('div');
+                        card.className = 'team-card reveal';
+                        
+                        let socialHtml = '';
+                        if (member.socials && member.socials.length > 0) {
+                            socialHtml = '<div class="team-socials">';
+                            member.socials.forEach(s => {
+                                const iconClass = s.platform === 'twitter' ? 'ph ph-twitter-logo' : 
+                                                 s.platform === 'linkedin' ? 'ph ph-linkedin-logo' :
+                                                 s.platform === 'instagram' ? 'ph ph-instagram-logo' : 'ph ph-link';
+                                socialHtml += `<a href="${s.url}" target="_blank" aria-label="${s.platform}"><i class="${iconClass}"></i></a>`;
+                            });
+                            socialHtml += '</div>';
+                        }
+
+                        card.innerHTML = `
+                            <div class="team-image-wrapper">
+                                <img src="${member.imageUrl}" alt="${member.name}" loading="lazy">
+                            </div>
+                            <div class="team-info">
+                                <h3>${member.name}</h3>
+                                <span class="role">${member.role}</span>
+                                <p class="bio">${member.bio || ''}</p>
+                                ${socialHtml}
+                            </div>
+                        `;
+                        teamGrid.appendChild(card);
+                        revealObserver.observe(card);
+                    });
+                }
+            })
+            .catch(err => console.warn('Team fetch failed:', err));
+    }
 });
