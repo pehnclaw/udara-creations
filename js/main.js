@@ -530,7 +530,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 }
                             `;
                             grid.appendChild(card);
-                            if (window.revealObserver) window.revealObserver.observe(card);
+                            if (revealObserver) revealObserver.observe(card);
                         }
                     });
                 }
