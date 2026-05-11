@@ -1969,3 +1969,46 @@ footer {
     font-size: 0.85rem;
     color: var(--text-muted);
 }
+
+/* Mobile Track Navigation Chips */
+.mobile-track-nav {
+    display: flex;
+    gap: 0.8rem;
+    overflow-x: auto;
+    padding: 1rem 1.5rem;
+    background: var(--bg-surface);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-light);
+    position: sticky;
+    top: 70px;
+    z-index: 85;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.mobile-track-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.mobile-nav-chip {
+    flex: 0 0 auto;
+    padding: 0.5rem 1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-light);
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+.mobile-nav-chip.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+@media (min-width: 1200px) {
+    .mobile-track-nav { display: none; }
+}
