@@ -469,6 +469,60 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.warn('Team fetch failed:', err));
     }
 
+    // Sanity CMS Integration for Courses
+    const fetchCourses = () => {
+        const PROJECT_ID = 'x3rb0ahu';
+        const DATASET = 'production';
+        const QUERY = encodeURIComponent('*[_type == "course"] | order(order asc) {title, category, description, duration, level, icon}');
+        const SANITY_URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2023-01-01/data/query/${DATASET}?query=${QUERY}`;
+
+        const grids = {
+            tech: document.getElementById('techGrid'),
+            languages: document.getElementById('languagesGrid'),
+            musical: document.getElementById('musicGrid'),
+            handcrafts: document.getElementById('handcraftsGrid'),
+            business: document.getElementById('businessGrid')
+        };
+
+        if (!Object.values(grids).some(g => g)) return;
+
+        fetch(SANITY_URL)
+            .then(res => res.json())
+            .then(({ result }) => {
+                if (result && result.length > 0) {
+                    Object.values(grids).forEach(grid => {
+                        if (grid) grid.innerHTML = '';
+                    });
+
+                    result.forEach(course => {
+                        const grid = grids[course.category];
+                        if (grid) {
+                            const card = document.createElement('div');
+                            card.className = 'course-card reveal';
+                            card.innerHTML = `
+                                <div class="course-icon"><i class="${course.icon || 'ph ph-graduation-cap'}"></i></div>
+                                <div class="course-meta">
+                                    ${course.duration ? `<span class="meta-tag">${course.duration}</span>` : ''}
+                                    ${course.level ? `<span class="meta-tag">${course.level}</span>` : ''}
+                                </div>
+                                <h3>${course.title}</h3>
+                                <p>${course.description || ''}</p>
+                                ${window.location.pathname.includes('training.html') ? 
+                                    `<a href="skills-${course.category}.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>` : 
+                                    ''
+                                }
+                            `;
+                            grid.appendChild(card);
+                            if (window.revealObserver) window.revealObserver.observe(card);
+                        }
+                    });
+                }
+            })
+            .catch(err => console.warn('Course fetch failed:', err));
+    };
+
+    fetchCourses();
+
     // Scroll Spying for Track Navigation
     const trackSections = document.querySelectorAll('.track-section, .showcase-section');
     const navItems = document.querySelectorAll('.track-nav-item');

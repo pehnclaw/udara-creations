@@ -377,6 +377,7 @@ const pages = {
             <a href="#languages" class="track-nav-item" data-label="Languages"></a>
             <a href="#music" class="track-nav-item" data-label="Musical Arts"></a>
             <a href="#handcrafts" class="track-nav-item" data-label="Handcrafts"></a>
+            <a href="#business" class="track-nav-item" data-label="Business & Management"></a>
             <a href="#showcase" class="track-nav-item" data-label="Student Showcase"></a>
         </div>
 
@@ -393,21 +394,10 @@ const pages = {
                 <h2>Tech <span class="highlight">Training</span></h2>
                 <p>Master the tools that power the digital economy.</p>
             </div>
-            <div class="track-grid">
-                <div class="course-card">
-                    <div class="course-icon"><i class="ph ph-code"></i></div>
-                    <div class="course-meta">
-                        <span class="meta-tag">12 Weeks</span>
-                        <span class="meta-tag">Beginner</span>
-                    </div>
-                    <h3>Full-Stack Web Dev</h3>
-                    <p>Build responsive, database-driven applications using modern frameworks like React and Node.js.</p>
-                    <ul class="course-features">
-                        <li><i class="ph ph-check-circle"></i> React & Next.js</li>
-                        <li><i class="ph ph-check-circle"></i> Database Design</li>
-                    </ul>
-                    <a href="skills-tech.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>
-                </div>
+            <div class="track-grid" id="techGrid">
+                <!-- Dynamic cards from Sanity -->
+                <div class="course-card-skeleton"></div>
+                <div class="course-card-skeleton"></div>
             </div>
         </section>
 
@@ -419,17 +409,8 @@ const pages = {
                 <h2>Language <span class="highlight">Mastery</span></h2>
                 <p>Bridge cultural gaps with professional language training.</p>
             </div>
-            <div class="track-grid">
-                <div class="course-card">
-                    <div class="course-icon"><i class="ph ph-translate"></i></div>
-                    <div class="course-meta">
-                        <span class="meta-tag">8 Weeks</span>
-                        <span class="meta-tag">All Levels</span>
-                    </div>
-                    <h3>Professional English</h3>
-                    <p>Master business communication, presentation skills, and professional writing.</p>
-                    <a href="skills-languages.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>
-                </div>
+            <div class="track-grid" id="languagesGrid">
+                <div class="course-card-skeleton"></div>
             </div>
         </section>
 
@@ -441,21 +422,9 @@ const pages = {
                 <h2>Musical <span class="highlight">Arts</span></h2>
                 <p>Find your voice and master your instrument with expert guidance.</p>
             </div>
-            <div class="track-grid">
-                <div class="course-card">
-                    <div class="course-icon"><i class="ph ph-music-notes"></i></div>
-                    <div class="course-meta"><span class="meta-tag">16 Weeks</span></div>
-                    <h3>Piano Mastery</h3>
-                    <p>From classical theory to contemporary performance and jazz improvisation.</p>
-                    <a href="skills-musical.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>
-                </div>
-                <div class="course-card">
-                    <div class="course-icon"><i class="ph ph-microphone"></i></div>
-                    <div class="course-meta"><span class="meta-tag">12 Weeks</span></div>
-                    <h3>Vocal Performance</h3>
-                    <p>Develop your unique voice through breathing techniques, pitch control, and stage presence.</p>
-                    <a href="skills-musical.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>
-                </div>
+            <div class="track-grid" id="musicGrid">
+                <div class="course-card-skeleton"></div>
+                <div class="course-card-skeleton"></div>
             </div>
         </section>
 
@@ -467,21 +436,23 @@ const pages = {
                 <h2>Handcraft <span class="highlight">Studio</span></h2>
                 <p>Master traditional and modern artisanal crafts.</p>
             </div>
-            <div class="track-grid">
-                <div class="course-card">
-                    <div class="course-icon"><i class="ph ph-needle"></i></div>
-                    <div class="course-meta"><span class="meta-tag">24 Weeks</span></div>
-                    <h3>Fashion Design</h3>
-                    <p>Master pattern making, professional tailoring, and contemporary fashion illustration.</p>
-                    <a href="skills-handcrafts.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>
-                </div>
-                <div class="course-card">
-                    <div class="course-icon"><i class="ph ph-hammer"></i></div>
-                    <div class="course-meta"><span class="meta-tag">12 Weeks</span></div>
-                    <h3>Carpentry & Woodwork</h3>
-                    <p>Learn to design and build custom furniture using professional woodworking tools and joinery.</p>
-                    <a href="skills-handcrafts.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>
-                </div>
+            <div class="track-grid" id="handcraftsGrid">
+                <div class="course-card-skeleton"></div>
+                <div class="course-card-skeleton"></div>
+            </div>
+        </section>
+
+        <!-- Business Track -->
+        <section id="business" class="track-section business-track">
+            <div class="track-glow"></div>
+            <div class="section-header">
+                <span class="meta-tag">Lead & Scale</span>
+                <h2>Business & <span class="highlight">Management</span></h2>
+                <p>Master the operational and strategic skills to scale your career.</p>
+            </div>
+            <div class="track-grid" id="businessGrid">
+                <div class="course-card-skeleton"></div>
+                <div class="course-card-skeleton"></div>
             </div>
         </section>
 
@@ -663,21 +634,9 @@ const pages = {
             <p>From lines of code to global infrastructure. Build the future today.</p>
         </section>
         <section class="track-section tech-track">
-            <div class="section-header">
-                <h2>Curriculum <span class="highlight">Overview</span></h2>
-                <p>Comprehensive tracks designed for career acceleration.</p>
-            </div>
-            <div class="track-grid">
-                <div class="course-card">
-                    <div class="course-icon"><i class="ph ph-code"></i></div>
-                    <h3>Frontend Engineering</h3>
-                    <p>Master React, Next.js, and modern styling architectures.</p>
-                </div>
-                <div class="course-card">
-                    <div class="course-icon"><i class="ph ph-database"></i></div>
-                    <h3>Backend & APIs</h3>
-                    <p>Build scalable systems with Node.js, PostgreSQL, and GraphQL.</p>
-                </div>
+            <div class="track-grid" id="techGrid">
+                <div class="course-card-skeleton"></div>
+                <div class="course-card-skeleton"></div>
             </div>
         </section>
     `,
@@ -687,12 +646,8 @@ const pages = {
             <p>Connect with the world through professional language training.</p>
         </section>
         <section class="track-section language-track">
-            <div class="track-grid">
-                <div class="course-card">
-                    <div class="course-icon"><i class="ph ph-translate"></i></div>
-                    <h3>Business English</h3>
-                    <p>Elevate your professional communication for global markets.</p>
-                </div>
+            <div class="track-grid" id="languagesGrid">
+                <div class="course-card-skeleton"></div>
             </div>
         </section>
     `,
@@ -702,12 +657,8 @@ const pages = {
             <p>From theory to performance. Express your creativity through sound.</p>
         </section>
         <section class="track-section musical-track">
-            <div class="track-grid">
-                <div class="course-card">
-                    <div class="course-icon"><i class="ph ph-music-notes"></i></div>
-                    <h3>Instrumental Mastery</h3>
-                    <p>Professional training in Piano, Guitar, and Drums.</p>
-                </div>
+            <div class="track-grid" id="musicGrid">
+                <div class="course-card-skeleton"></div>
             </div>
         </section>
     `,
@@ -717,12 +668,19 @@ const pages = {
             <p>Master the art of creating with your hands.</p>
         </section>
         <section class="track-section handcraft-track">
-            <div class="track-grid">
-                <div class="course-card">
-                    <div class="course-icon"><i class="ph ph-needle"></i></div>
-                    <h3>Fashion & Tailoring</h3>
-                    <p>Professional pattern drafting and garment construction.</p>
-                </div>
+            <div class="track-grid" id="handcraftsGrid">
+                <div class="course-card-skeleton"></div>
+            </div>
+        </section>
+    `,
+    'skills-business.html': `
+        <section class="internal-hero business-track">
+            <h1>Business & <span class="highlight">Management</span></h1>
+            <p>Strategic skills for the modern professional.</p>
+        </section>
+        <section class="track-section business-track">
+            <div class="track-grid" id="businessGrid">
+                <div class="course-card-skeleton"></div>
             </div>
         </section>
     `
@@ -755,6 +713,8 @@ for (const [filename, content] of Object.entries(pages)) {
     } else if (filename === 'about.html') {
         pageHeader = pageHeader.replace('<title>Udara Creations | Premium Digital Solutions & Innovation</title>', '<title>About Us | The Vision Behind Udara Creations</title>');
         pageHeader = pageHeader.replace('Udara Creations is a multidisciplinary hub in Abuja offering high-end Branding, Software Development, Creative Media, and Strategic Consultation.', 'Discover the mission, values, and story of Udara Creations—Abuja\'s leading multidisciplinary agency.');
+    } else if (filename.startsWith('skills-')) {
+        pageHeader = pageHeader.replace('<title>Udara Creations | Premium Digital Solutions & Innovation</title>', `<title>${filename.split('-')[1].split('.')[0].toUpperCase()} Track | Udara Academy</title>`);
     }
 
     fs.writeFileSync(filename, pageHeader + content + footer);
