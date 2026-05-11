@@ -294,6 +294,56 @@ ul {
     padding-left: 2rem !important;
 }
 
+/* Submenu Logic */
+.has-submenu {
+    position: relative;
+}
+
+.submenu {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: var(--bg-surface);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 0.5rem 0;
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px);
+    transition: var(--transition-smooth);
+    box-shadow: 0 10px 30px var(--shadow-hover);
+}
+
+.has-submenu:hover > .submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.submenu a {
+    padding: 0.6rem 1.5rem !important;
+    font-size: 0.9rem !important;
+}
+
+@media (max-width: 768px) {
+    .submenu {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        background: rgba(255,255,255,0.05);
+        border: none;
+        box-shadow: none;
+        padding-left: 1.5rem;
+        display: none;
+    }
+    .has-submenu.active .submenu {
+        display: block;
+    }
+}
+
 .theme-toggle {
     font-size: 1.5rem;
     cursor: pointer;
@@ -1687,4 +1737,235 @@ footer {
     background-size: 200% 100%;
     animation: loading 1.5s infinite;
     border-radius: 20px;
+}
+
+/* =========================================
+   Skill Acquisition - Tracks & Cards
+   ========================================= */
+
+.track-section {
+    padding: var(--section-pad);
+    position: relative;
+    overflow: hidden;
+    scroll-margin-top: 100px;
+}
+
+.track-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    height: 80vw;
+    background: radial-gradient(circle, var(--accent-color, var(--primary)) 0%, transparent 70%);
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.track-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.course-card {
+    background: var(--bg-surface);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-light);
+    border-radius: 24px;
+    padding: 2.5rem;
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 100%;
+}
+
+.course-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-color, var(--primary));
+    box-shadow: 0 20px 40px var(--shadow-hover);
+    background: var(--bg-surface-hover);
+}
+
+.course-icon {
+    font-size: 2.5rem;
+    color: var(--accent-color, var(--primary));
+    background: rgba(255, 255, 255, 0.03);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    transition: var(--transition-smooth);
+}
+
+.course-card:hover .course-icon {
+    transform: scale(1.1) rotate(5deg);
+    background: rgba(var(--accent-rgb), 0.1);
+}
+
+.course-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.meta-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.course-card h3 {
+    font-size: 1.4rem;
+    color: var(--text-heading);
+}
+
+.course-card p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+.course-features {
+    list-style: none;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+}
+
+.course-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.course-features i {
+    color: var(--accent-color, var(--primary));
+}
+
+/* Category Accents */
+.tech-track { --accent-color: var(--accent-cyan); --accent-rgb: 0, 240, 255; }
+.language-track { --accent-color: var(--accent-gold); --accent-rgb: 242, 169, 0; }
+.musical-track { --accent-color: var(--accent-purple); --accent-rgb: 168, 85, 247; }
+.handcraft-track { --accent-color: var(--accent-orange); --accent-rgb: 255, 94, 0; }
+
+/* Side Nav */
+.track-nav {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    z-index: 90;
+    display: none; /* Desktop only */
+}
+
+@media (min-width: 1200px) {
+    .track-nav { display: flex; }
+}
+
+.track-nav-item {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--border-light);
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+.track-nav-item::before {
+    content: attr(data-label);
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    opacity: 0;
+    transition: var(--transition-smooth);
+}
+
+.track-nav-item:hover,
+.track-nav-item.active {
+    background: var(--primary);
+    transform: scale(1.5);
+}
+
+.track-nav-item:hover::before,
+.track-nav-item.active::before {
+    opacity: 1;
+    color: var(--primary);
+}
+
+/* Student Showcase */
+.showcase-section {
+    padding: var(--section-pad);
+    background: var(--bg-footer);
+}
+
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.testimonial-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    padding: 2.5rem;
+    position: relative;
+}
+
+.testimonial-card::after {
+    content: '"';
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 5rem;
+    font-family: serif;
+    color: var(--primary);
+    opacity: 0.1;
+}
+
+.student-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.student-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--border-light);
+}
+
+.student-details h4 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.student-details span {
+    font-size: 0.85rem;
+    color: var(--text-muted);
 }

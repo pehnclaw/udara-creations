@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Auto-apply reveal class to sections and key cards
-    const revealElements = document.querySelectorAll('section:not(.hero), .service-card, .capability-card, .process-step, .portfolio-item, .testimonial-card, .about-content, .about-visual');
+    const revealElements = document.querySelectorAll('section:not(.hero), .service-card, .capability-card, .process-step, .portfolio-item, .testimonial-card, .about-content, .about-visual, .track-section, .course-card');
     revealElements.forEach(el => {
         el.classList.add('reveal');
         revealObserver.observe(el);
@@ -467,5 +467,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .catch(err => console.warn('Team fetch failed:', err));
+    }
+
+    // Scroll Spying for Track Navigation
+    const trackSections = document.querySelectorAll('.track-section, .showcase-section');
+    const navItems = document.querySelectorAll('.track-nav-item');
+
+    if (navItems.length > 0) {
+        function updateActiveNav() {
+            let current = "";
+            trackSections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute("id");
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove("active");
+                if (item.getAttribute("href").slice(1) === current) {
+                    item.classList.add("active");
+                }
+            });
+        }
+        window.addEventListener("scroll", updateActiveNav);
     }
 });

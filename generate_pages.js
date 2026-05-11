@@ -371,78 +371,148 @@ const pages = {
         </section>
     `,
     'training.html': `
+        <!-- Track Navigation (Desktop Only) -->
+        <div class="track-nav">
+            <a href="#tech" class="track-nav-item active" data-label="Tech Skills"></a>
+            <a href="#languages" class="track-nav-item" data-label="Languages"></a>
+            <a href="#music" class="track-nav-item" data-label="Musical Arts"></a>
+            <a href="#handcrafts" class="track-nav-item" data-label="Handcrafts"></a>
+            <a href="#showcase" class="track-nav-item" data-label="Student Showcase"></a>
+        </div>
+
         <section class="internal-hero">
             <h1>Skill <span class="highlight">Acquisition</span></h1>
             <p>Empowering the next generation of innovators with hands-on, industry-certified training programs.</p>
         </section>
 
-        <section class="service-intro">
+        <!-- Tech Track -->
+        <section id="tech" class="track-section tech-track">
+            <div class="track-glow"></div>
             <div class="section-header">
-                <h2>Our <span class="highlight">Academy</span></h2>
-                <p>Bridging the gap between theory and real-world execution.</p>
+                <span class="meta-tag">Code & Build</span>
+                <h2>Tech <span class="highlight">Training</span></h2>
+                <p>Master the tools that power the digital economy.</p>
             </div>
-            <div class="capabilities-grid">
-                <div class="capability-card">
-                    <i class="ph ph-laptop"></i>
-                    <h3>Tech Training</h3>
-                    <p>Comprehensive bootcamps in web development, mobile app architecture, and data science designed for absolute beginners and pros.</p>
-                </div>
-                <div class="capability-card">
-                    <i class="ph ph-paint-brush-broad"></i>
-                    <h3>Creative Arts</h3>
-                    <p>Mastering graphic design, professional photography, and cinematic videography using industry-standard tools and techniques.</p>
-                </div>
-                <div class="capability-card">
-                    <i class="ph ph-handshake"></i>
-                    <h3>Business Skills</h3>
-                    <p>Specialized workshops in digital marketing, project management, and entrepreneurship to help you build and scale your own business.</p>
-                </div>
-                <div class="capability-card">
-                    <i class="ph ph-certificate"></i>
-                    <h3>Certification</h3>
-                    <p>Receive recognized industry certifications upon completion of our rigorous programs, helping you stand out in the global job market.</p>
+            <div class="track-grid">
+                <div class="course-card">
+                    <div class="course-icon"><i class="ph ph-code"></i></div>
+                    <div class="course-meta">
+                        <span class="meta-tag">12 Weeks</span>
+                        <span class="meta-tag">Beginner</span>
+                    </div>
+                    <h3>Full-Stack Web Dev</h3>
+                    <p>Build responsive, database-driven applications using modern frameworks like React and Node.js.</p>
+                    <ul class="course-features">
+                        <li><i class="ph ph-check-circle"></i> React & Next.js</li>
+                        <li><i class="ph ph-check-circle"></i> Database Design</li>
+                    </ul>
+                    <a href="skills-tech.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>
                 </div>
             </div>
         </section>
 
-        <section class="process-section">
+        <!-- Languages Track -->
+        <section id="languages" class="track-section language-track">
+            <div class="track-glow"></div>
             <div class="section-header">
-                <h2>The <span class="highlight">Learning</span> Journey</h2>
-                <p>A structured approach to mastering new skills.</p>
+                <span class="meta-tag">Speak & Connect</span>
+                <h2>Language <span class="highlight">Mastery</span></h2>
+                <p>Bridge cultural gaps with professional language training.</p>
             </div>
-            <div class="process-grid">
-                <div class="process-step">
-                    <div class="step-number">01</div>
-                    <h4>Onboarding</h4>
-                    <p>Initial assessment and track selection based on your goals.</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">02</div>
-                    <h4>Core Phase</h4>
-                    <p>Intensive hands-on training with expert industry mentors.</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">03</div>
-                    <h4>Project Work</h4>
-                    <p>Building real-world portfolio items to demonstrate mastery.</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">04</div>
-                    <h4>Review</h4>
-                    <p>Final assessments and professional feedback sessions.</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">05</div>
-                    <h4>Graduate</h4>
-                    <p>Certification award and career placement assistance.</p>
+            <div class="track-grid">
+                <div class="course-card">
+                    <div class="course-icon"><i class="ph ph-translate"></i></div>
+                    <div class="course-meta">
+                        <span class="meta-tag">8 Weeks</span>
+                        <span class="meta-tag">All Levels</span>
+                    </div>
+                    <h3>Professional English</h3>
+                    <p>Master business communication, presentation skills, and professional writing.</p>
+                    <a href="skills-languages.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>
                 </div>
             </div>
         </section>
 
-        <section class="service-cta">
-            <h2>Ready to <span class="highlight">level up</span> your career?</h2>
-            <p>Join our next cohort and gain the skills that the modern economy demands.</p>
-            <a href="#contact" class="btn-primary" style="margin-top: 2rem;">Apply Now</a>
+        <!-- Musical Track -->
+        <section id="music" class="track-section musical-track">
+            <div class="track-glow"></div>
+            <div class="section-header">
+                <span class="meta-tag">Rhythm & Harmony</span>
+                <h2>Musical <span class="highlight">Arts</span></h2>
+                <p>Find your voice and master your instrument with expert guidance.</p>
+            </div>
+            <div class="track-grid">
+                <div class="course-card">
+                    <div class="course-icon"><i class="ph ph-music-notes"></i></div>
+                    <div class="course-meta"><span class="meta-tag">16 Weeks</span></div>
+                    <h3>Piano Mastery</h3>
+                    <p>From classical theory to contemporary performance and jazz improvisation.</p>
+                    <a href="skills-musical.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon"><i class="ph ph-microphone"></i></div>
+                    <div class="course-meta"><span class="meta-tag">12 Weeks</span></div>
+                    <h3>Vocal Performance</h3>
+                    <p>Develop your unique voice through breathing techniques, pitch control, and stage presence.</p>
+                    <a href="skills-musical.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Handcrafts Track -->
+        <section id="handcrafts" class="track-section handcraft-track">
+            <div class="track-glow"></div>
+            <div class="section-header">
+                <span class="meta-tag">Craft & Create</span>
+                <h2>Handcraft <span class="highlight">Studio</span></h2>
+                <p>Master traditional and modern artisanal crafts.</p>
+            </div>
+            <div class="track-grid">
+                <div class="course-card">
+                    <div class="course-icon"><i class="ph ph-needle"></i></div>
+                    <div class="course-meta"><span class="meta-tag">24 Weeks</span></div>
+                    <h3>Fashion Design</h3>
+                    <p>Master pattern making, professional tailoring, and contemporary fashion illustration.</p>
+                    <a href="skills-handcrafts.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon"><i class="ph ph-hammer"></i></div>
+                    <div class="course-meta"><span class="meta-tag">12 Weeks</span></div>
+                    <h3>Carpentry & Woodwork</h3>
+                    <p>Learn to design and build custom furniture using professional woodworking tools and joinery.</p>
+                    <a href="skills-handcrafts.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Student Showcase -->
+        <section id="showcase" class="showcase-section">
+            <div class="section-header">
+                <h2>Student <span class="highlight">Showcase</span></h2>
+                <p>Real stories from our talented graduates.</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p>"The Web Development bootcamp changed my life. I went from zero coding knowledge to landing a job at a top tech firm in just 4 months."</p>
+                    <div class="student-info">
+                        <div class="student-avatar" style="background: var(--accent-cyan);"></div>
+                        <div class="student-details">
+                            <h4>David Okoro</h4>
+                            <span>Full-Stack Web Graduate</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p>"Learning fashion design at Udara was an incredible experience. The hands-on approach helped me launch my own label immediately after graduation."</p>
+                    <div class="student-info">
+                        <div class="student-avatar" style="background: var(--accent-orange);"></div>
+                        <div class="student-details">
+                            <h4>Sarah Ahmed</h4>
+                            <span>Fashion Design Graduate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     `,
     'consultation.html': `
@@ -584,6 +654,76 @@ const pages = {
             <h2>Partner with <span class="highlight">Excellence.</span></h2>
             <p>Ready to take your project to the next dimension? Let's talk.</p>
             <a href="#contact" class="btn-primary" style="margin-top: 2rem;">Get in Touch</a>
+        </section>
+    `,
+    'skills-tech.html': `
+        <section class="internal-hero tech-track">
+            <div class="track-glow"></div>
+            <h1>Tech <span class="highlight">Skills</span></h1>
+            <p>From lines of code to global infrastructure. Build the future today.</p>
+        </section>
+        <section class="track-section tech-track">
+            <div class="section-header">
+                <h2>Curriculum <span class="highlight">Overview</span></h2>
+                <p>Comprehensive tracks designed for career acceleration.</p>
+            </div>
+            <div class="track-grid">
+                <div class="course-card">
+                    <div class="course-icon"><i class="ph ph-code"></i></div>
+                    <h3>Frontend Engineering</h3>
+                    <p>Master React, Next.js, and modern styling architectures.</p>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon"><i class="ph ph-database"></i></div>
+                    <h3>Backend & APIs</h3>
+                    <p>Build scalable systems with Node.js, PostgreSQL, and GraphQL.</p>
+                </div>
+            </div>
+        </section>
+    `,
+    'skills-languages.html': `
+        <section class="internal-hero language-track">
+            <h1>Language <span class="highlight">Mastery</span></h1>
+            <p>Connect with the world through professional language training.</p>
+        </section>
+        <section class="track-section language-track">
+            <div class="track-grid">
+                <div class="course-card">
+                    <div class="course-icon"><i class="ph ph-translate"></i></div>
+                    <h3>Business English</h3>
+                    <p>Elevate your professional communication for global markets.</p>
+                </div>
+            </div>
+        </section>
+    `,
+    'skills-musical.html': `
+        <section class="internal-hero musical-track">
+            <h1>Musical <span class="highlight">Arts</span></h1>
+            <p>From theory to performance. Express your creativity through sound.</p>
+        </section>
+        <section class="track-section musical-track">
+            <div class="track-grid">
+                <div class="course-card">
+                    <div class="course-icon"><i class="ph ph-music-notes"></i></div>
+                    <h3>Instrumental Mastery</h3>
+                    <p>Professional training in Piano, Guitar, and Drums.</p>
+                </div>
+            </div>
+        </section>
+    `,
+    'skills-handcrafts.html': `
+        <section class="internal-hero handcraft-track">
+            <h1>Handcraft <span class="highlight">Studio</span></h1>
+            <p>Master the art of creating with your hands.</p>
+        </section>
+        <section class="track-section handcraft-track">
+            <div class="track-grid">
+                <div class="course-card">
+                    <div class="course-icon"><i class="ph ph-needle"></i></div>
+                    <h3>Fashion & Tailoring</h3>
+                    <p>Professional pattern drafting and garment construction.</p>
+                </div>
+            </div>
         </section>
     `
 };
