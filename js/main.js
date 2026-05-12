@@ -503,6 +503,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!Object.values(grids).some(g => g)) return;
 
+        const isMainPage = window.location.pathname.includes('training.html');
+        const counts = { tech: 0, languages: 0, musical: 0, handcrafts: 0, business: 0 };
+
         fetch(SANITY_URL)
             .then(res => res.json())
             .then(({ result }) => {
@@ -514,6 +517,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     result.forEach(course => {
                         const grid = grids[course.category];
                         if (grid) {
+                            // Limit to 3 items per category on the main Training page
+                            if (isMainPage && counts[course.category] >= 3) return;
+                            counts[course.category]++;
+
                             const card = document.createElement('div');
                             card.className = 'course-card reveal';
                             card.setAttribute('data-description', course.description || '');
@@ -521,25 +528,26 @@ document.addEventListener('DOMContentLoaded', () => {
                             // Smarter Icon Class Logic
                             const getIconClass = (rawIcon) => {
                                 if (!rawIcon) return 'ph ph-graduation-cap';
-                                const parts = rawIcon.toLowerCase().trim().split(/\s+/);
-                                let classes = ['ph'];
-                                let baseIcon = '';
-
-                                parts.forEach(part => {
-                                    if (['bold', 'duotone', 'fill', 'light', 'thin'].includes(part)) {
-                                        classes.push(`ph-${part}`);
-                                    } else if (part.startsWith('ph-')) {
-                                        const weight = part.split('-')[1];
-                                        if (['bold', 'duotone', 'fill', 'light', 'thin'].includes(weight)) {
-                                            classes.push(part);
-                                        } else {
-                                            baseIcon = part;
-                                        }
-                                    } else {
-                                        baseIcon = `ph-${part}`;
+                                
+                                // Standardize: lowercase, replace hyphens with spaces for weight detection
+                                let clean = rawIcon.toLowerCase().trim();
+                                const weights = ['bold', 'duotone', 'fill', 'light', 'thin'];
+                                let detectedWeight = '';
+                                
+                                weights.forEach(w => {
+                                    if (clean.includes(w)) {
+                                        detectedWeight = `ph-${w}`;
+                                        clean = clean.replace(w, '').replace(/-/g, ' ').trim();
                                     }
                                 });
-                                if (baseIcon) classes.push(baseIcon);
+
+                                // Clean up any remaining double spaces or lone ph-
+                                const baseName = clean.replace(/^ph-/, '').replace(/\s+/g, '-').trim();
+                                
+                                let classes = ['ph'];
+                                if (detectedWeight) classes.push(detectedWeight);
+                                classes.push(`ph-${baseName}`);
+                                
                                 return classes.join(' ');
                             };
 
@@ -553,7 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </div>
                                 <h3>${course.title}</h3>
                                 <p>${course.description ? course.description.substring(0, 100) + '...' : ''}</p>
-                                ${window.location.pathname.includes('training.html') ? 
+                                ${isMainPage ? 
                                     `<a href="skills-${course.category}.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>` : 
                                     '<span class="tap-hint">Tap for details <i class="ph ph-info"></i></span>'
                                 }
