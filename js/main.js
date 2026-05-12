@@ -518,11 +518,32 @@ document.addEventListener('DOMContentLoaded', () => {
                             card.className = 'course-card reveal';
                             card.setAttribute('data-description', course.description || '');
                             
-                            // Robust Icon Class Logic
-                            let iconClass = course.icon || 'ph-graduation-cap';
-                            if (!iconClass.startsWith('ph ')) {
-                                iconClass = iconClass.startsWith('ph-') ? `ph ${iconClass}` : `ph ph-${iconClass}`;
-                            }
+                            // Smarter Icon Class Logic
+                            const getIconClass = (rawIcon) => {
+                                if (!rawIcon) return 'ph ph-graduation-cap';
+                                const parts = rawIcon.toLowerCase().trim().split(/\s+/);
+                                let classes = ['ph'];
+                                let baseIcon = '';
+
+                                parts.forEach(part => {
+                                    if (['bold', 'duotone', 'fill', 'light', 'thin'].includes(part)) {
+                                        classes.push(`ph-${part}`);
+                                    } else if (part.startsWith('ph-')) {
+                                        const weight = part.split('-')[1];
+                                        if (['bold', 'duotone', 'fill', 'light', 'thin'].includes(weight)) {
+                                            classes.push(part);
+                                        } else {
+                                            baseIcon = part;
+                                        }
+                                    } else {
+                                        baseIcon = `ph-${part}`;
+                                    }
+                                });
+                                if (baseIcon) classes.push(baseIcon);
+                                return classes.join(' ');
+                            };
+
+                            const iconClass = getIconClass(course.icon);
 
                             card.innerHTML = `
                                 <div class="course-icon"><i class="${iconClass}"></i></div>
