@@ -516,17 +516,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (grid) {
                             const card = document.createElement('div');
                             card.className = 'course-card reveal';
+                            card.setAttribute('data-description', course.description || '');
+                            
+                            // Robust Icon Class Logic
+                            let iconClass = course.icon || 'ph-graduation-cap';
+                            if (!iconClass.startsWith('ph ')) {
+                                iconClass = iconClass.startsWith('ph-') ? `ph ${iconClass}` : `ph ph-${iconClass}`;
+                            }
+
                             card.innerHTML = `
-                                <div class="course-icon"><i class="${course.icon || 'ph ph-graduation-cap'}"></i></div>
+                                <div class="course-icon"><i class="${iconClass}"></i></div>
                                 <div class="course-meta">
                                     ${course.duration ? `<span class="meta-tag">${course.duration}</span>` : ''}
                                     ${course.level ? `<span class="meta-tag">${course.level}</span>` : ''}
                                 </div>
                                 <h3>${course.title}</h3>
-                                <p>${course.description || ''}</p>
+                                <p>${course.description ? course.description.substring(0, 100) + '...' : ''}</p>
                                 ${window.location.pathname.includes('training.html') ? 
                                     `<a href="skills-${course.category}.html" class="btn-secondary">Explore Track <i class="ph ph-arrow-right"></i></a>` : 
-                                    ''
+                                    '<span class="tap-hint">Tap for details <i class="ph ph-info"></i></span>'
                                 }
                             `;
                             grid.appendChild(card);
@@ -539,6 +547,71 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     fetchCourses();
+
+    // Course Modal Logic
+    const courseModal = document.getElementById('courseModal');
+    if (courseModal) {
+        const closeModal = courseModal.querySelector('.close-modal');
+        const enrollWhatsApp = document.getElementById('enrollWhatsApp');
+        const inquireForm = document.getElementById('inquireForm');
+
+        document.addEventListener('click', (e) => {
+            const card = e.target.closest('.course-card');
+            // If it's a card but NOT an explicit "Explore Track" button (which is on training.html)
+            if (card && !e.target.closest('.btn-secondary')) {
+                const title = card.querySelector('h3').textContent;
+                const desc = card.getAttribute('data-description') || "";
+                const duration = card.querySelector('.meta-tag:nth-child(1)')?.textContent || "";
+                const level = card.querySelector('.meta-tag:nth-child(2)')?.textContent || "";
+                const iconClass = card.querySelector('.course-icon i').className;
+
+                document.getElementById('courseModalTitle').textContent = title;
+                document.getElementById('courseModalDesc').textContent = desc;
+                document.getElementById('courseModalDuration').textContent = duration;
+                document.getElementById('courseModalLevel').textContent = level;
+                document.getElementById('courseModalIcon').className = iconClass;
+
+                // WhatsApp Link
+                const waMessage = encodeURIComponent(`Hello Udara Academy! I am interested in enrolling for the ${title} program. Could I get more details?`);
+                enrollWhatsApp.href = `https://wa.me/2347042772050?text=${waMessage}`;
+
+                courseModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+
+        if (inquireForm) {
+            inquireForm.addEventListener('click', () => {
+                const title = document.getElementById('courseModalTitle').textContent;
+                courseModal.classList.remove('active');
+                document.body.style.overflow = '';
+                
+                const contactSection = document.getElementById('contact');
+                if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth' });
+                    const messageBox = document.getElementById('message');
+                    if (messageBox) {
+                        messageBox.value = `I'm interested in the ${title} program. Please send me more information.`;
+                        messageBox.focus();
+                    }
+                }
+            });
+        }
+
+        if (closeModal) {
+            closeModal.addEventListener('click', () => {
+                courseModal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target === courseModal) {
+                courseModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    }
 
     // Scroll Spying for Track Navigation
     const trackSections = document.querySelectorAll('.track-section, .showcase-section');

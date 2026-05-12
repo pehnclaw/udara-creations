@@ -2012,3 +2012,73 @@ footer {
 @media (min-width: 1200px) {
     .mobile-track-nav { display: none; }
 }
+
+/* Course Modal Specifics */
+#courseModal .modal-body {
+    display: flex;
+    gap: 2.5rem;
+    align-items: flex-start;
+}
+
+#courseModal .modal-icon {
+    font-size: 3.5rem;
+    color: var(--primary);
+    background: rgba(255,255,255,0.03);
+    padding: 1.5rem;
+    border-radius: 20px;
+    border: 1px solid var(--border-light);
+}
+
+#courseModal .modal-text {
+    flex: 1;
+}
+
+#courseModal .modal-meta {
+    display: flex;
+    gap: 1rem;
+    margin: 0.5rem 0 1.5rem;
+}
+
+#courseModal .modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+#enrollWhatsApp {
+    background: #25D366 !important;
+    border-color: #25D366 !important;
+    color: white !important;
+}
+
+#enrollWhatsApp:hover {
+    background: #128C7E !important;
+    border-color: #128C7E !important;
+    transform: translateY(-3px);
+}
+
+.tap-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin-top: auto;
+    opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+    #courseModal .modal-body {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    #courseModal .modal-meta {
+        justify-content: center;
+    }
+    #courseModal .modal-actions {
+        justify-content: center;
+    }
+}
