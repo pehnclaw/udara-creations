@@ -40,9 +40,77 @@ let footer = `
             </div>
         </div>
     </div>
+    <!-- Portfolio Modal -->
+    <div id="portfolioModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <img id="modalImg" src="" alt="">
+                <div class="modal-text">
+                    <h2 id="modalTitle">Project Title</h2>
+                    <p id="modalCategory" class="highlight"></p>
+                    <p id="modalDesc"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content" style="max-width: 400px; text-align: center; padding: 3rem;">
+            <span class="close-modal">&times;</span>
+            <i class="ph ph-check-circle" style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;"></i>
+            <h2>Message <span class="highlight">Sent!</span></h2>
+            <p>Thank you for reaching out. Our team will get back to you shortly.</p>
+            <button class="btn-primary close-modal-btn" style="margin-top: 1.5rem;">Continue</button>
+        </div>
+    </div>
 ` + indexHtml.substring(footerStart);
 
+
 const pages = {
+    'blog.html': `
+        <section class="internal-hero">
+            <h1>Udara <span class="highlight">Insights</span></h1>
+            <p>Thoughts, stories and ideas from our team of innovators.</p>
+        </section>
+        <section class="blog-filters" style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap;">
+            <button class="filter-btn active" data-filter="all">All Posts</button>
+            <button class="filter-btn" data-filter="tech">Tech & Software</button>
+            <button class="filter-btn" data-filter="branding">Branding</button>
+            <button class="filter-btn" data-filter="media">Media</button>
+            <button class="filter-btn" data-filter="academy">Academy News</button>
+        </section>
+        <section class="blog-grid" id="blogGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; padding: 0 5%;">
+            <!-- Dynamic Blog Posts from Sanity -->
+            <div class="course-card-skeleton" style="height: 350px;"></div>
+            <div class="course-card-skeleton" style="height: 350px;"></div>
+            <div class="course-card-skeleton" style="height: 350px;"></div>
+        </section>
+    `,
+    'post.html': `
+        <section class="internal-hero" id="postHero" style="padding-bottom: 2rem; min-height: 40vh;">
+            <div class="post-meta" style="margin-bottom: 1rem; color: var(--text-secondary); display: flex; gap: 1rem; justify-content: center; font-size: 0.9rem;">
+                <span id="postCategory" class="meta-tag" style="background: rgba(255,255,255,0.1); border:none;">Category</span>
+                <span id="postDate">Loading date...</span>
+            </div>
+            <h1 id="postTitle" style="font-size: clamp(2rem, 5vw, 4rem); max-width: 900px; margin: 0 auto;">Loading Post...</h1>
+            <div id="postAuthor" style="margin-top: 2rem; display: flex; align-items: center; justify-content: center; gap: 1rem;">
+                <div class="author-avatar" id="postAuthorAvatar" style="width: 50px; height: 50px; border-radius: 50%; background: var(--border-light);"></div>
+                <div style="text-align: left;">
+                    <h4 id="postAuthorName" style="margin: 0; font-size: 1rem;">Author</h4>
+                    <span id="postAuthorRole" style="font-size: 0.8rem; color: var(--text-secondary);">Role</span>
+                </div>
+            </div>
+        </section>
+        <section class="post-content" style="max-width: 800px; margin: 0 auto; padding: 3rem 5%; line-height: 1.8; font-size: 1.1rem; color: var(--text-secondary);">
+            <img id="postImage" src="" alt="Post cover" style="width: 100%; border-radius: 20px; margin-bottom: 3rem; display: none;">
+            <div id="postBody">
+                <div class="course-card-skeleton" style="height: 20px; margin-bottom: 1rem;"></div>
+                <div class="course-card-skeleton" style="height: 20px; margin-bottom: 1rem;"></div>
+                <div class="course-card-skeleton" style="height: 20px; width: 80%;"></div>
+            </div>
+        </section>
+    `,
     'portfolio.html': `
         <section class="internal-hero">
             <h1>Our <span class="highlight">Portfolio</span></h1>
@@ -79,21 +147,6 @@ const pages = {
                 </div>
             </div>
         </section>
-
-        <!-- Portfolio Modal -->
-        <div id="portfolioModal" class="modal">
-            <div class="modal-content">
-                <span class="close-modal">&times;</span>
-                <div class="modal-body">
-                    <img id="modalImg" src="" alt="">
-                    <div class="modal-text">
-                        <h2 id="modalTitle">Project Title</h2>
-                        <p id="modalCategory" class="highlight"></p>
-                        <p id="modalDesc"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
     `,
     'software.html': `
         <section class="internal-hero">
@@ -161,6 +214,18 @@ const pages = {
                     <h4>Launch</h4>
                     <p>Seamless deployment and post-launch monitoring.</p>
                 </div>
+            </div>
+        </section>
+
+        <section class="service-portfolio">
+            <div class="section-header">
+                <h2>Featured <span class="highlight">Case Studies</span></h2>
+                <p>See how we've helped others succeed.</p>
+            </div>
+            <div class="portfolio-grid service-portfolio-grid" data-service-category="software" style="margin-bottom: 4rem;">
+                <div class="testimonial-card-skeleton" style="height: 300px; width: 100%; border-radius: 20px;"></div>
+                <div class="testimonial-card-skeleton" style="height: 300px; width: 100%; border-radius: 20px;"></div>
+                <div class="testimonial-card-skeleton" style="height: 300px; width: 100%; border-radius: 20px;"></div>
             </div>
         </section>
 
@@ -239,6 +304,18 @@ const pages = {
             </div>
         </section>
 
+        <section class="service-portfolio">
+            <div class="section-header">
+                <h2>Featured <span class="highlight">Case Studies</span></h2>
+                <p>See how we've helped others succeed.</p>
+            </div>
+            <div class="portfolio-grid service-portfolio-grid" data-service-category="branding" style="margin-bottom: 4rem;">
+                <div class="testimonial-card-skeleton" style="height: 300px; width: 100%; border-radius: 20px;"></div>
+                <div class="testimonial-card-skeleton" style="height: 300px; width: 100%; border-radius: 20px;"></div>
+                <div class="testimonial-card-skeleton" style="height: 300px; width: 100%; border-radius: 20px;"></div>
+            </div>
+        </section>
+
         <section class="service-cta">
             <h2>Make your brand <span class="highlight">unforgettable.</span></h2>
             <p>Join the ranks of premium businesses that trust Udara for their visual excellence.</p>
@@ -314,6 +391,18 @@ const pages = {
             </div>
         </section>
 
+        <section class="service-portfolio">
+            <div class="section-header">
+                <h2>Featured <span class="highlight">Case Studies</span></h2>
+                <p>See how we've helped others succeed.</p>
+            </div>
+            <div class="portfolio-grid service-portfolio-grid" data-service-category="media" style="margin-bottom: 4rem;">
+                <div class="testimonial-card-skeleton" style="height: 300px; width: 100%; border-radius: 20px;"></div>
+                <div class="testimonial-card-skeleton" style="height: 300px; width: 100%; border-radius: 20px;"></div>
+                <div class="testimonial-card-skeleton" style="height: 300px; width: 100%; border-radius: 20px;"></div>
+            </div>
+        </section>
+
         <section class="service-cta">
             <h2>Bring your vision to <span class="highlight">life.</span></h2>
             <p>Let's create something cinematic that your audience will never forget.</p>
@@ -386,6 +475,18 @@ const pages = {
                     <h4>Scaling</h4>
                     <p>Doubling down on winning tactics for maximum impact.</p>
                 </div>
+            </div>
+        </section>
+
+        <section class="service-portfolio">
+            <div class="section-header">
+                <h2>Featured <span class="highlight">Case Studies</span></h2>
+                <p>See how we've helped others succeed.</p>
+            </div>
+            <div class="portfolio-grid service-portfolio-grid" data-service-category="marketing" style="margin-bottom: 4rem;">
+                <div class="testimonial-card-skeleton" style="height: 300px; width: 100%; border-radius: 20px;"></div>
+                <div class="testimonial-card-skeleton" style="height: 300px; width: 100%; border-radius: 20px;"></div>
+                <div class="testimonial-card-skeleton" style="height: 300px; width: 100%; border-radius: 20px;"></div>
             </div>
         </section>
 
@@ -497,27 +598,23 @@ const pages = {
                 <h2>Student <span class="highlight">Showcase</span></h2>
                 <p>Real stories from our talented graduates.</p>
             </div>
-            <div class="testimonial-grid">
-                <div class="testimonial-card">
-                    <p>"The Web Development bootcamp changed my life. I went from zero coding knowledge to landing a job at a top tech firm in just 4 months."</p>
-                    <div class="student-info">
-                        <div class="student-avatar" style="background: var(--accent-cyan);"></div>
-                        <div class="student-details">
-                            <h4>David Okoro</h4>
-                            <span>Full-Stack Web Graduate</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <p>"Learning fashion design at Udara was an incredible experience. The hands-on approach helped me launch my own label immediately after graduation."</p>
-                    <div class="student-info">
-                        <div class="student-avatar" style="background: var(--accent-orange);"></div>
-                        <div class="student-details">
-                            <h4>Sarah Ahmed</h4>
-                            <span>Fashion Design Graduate</span>
-                        </div>
-                    </div>
-                </div>
+            <div id="academyTestimonialsGrid" class="testimonial-grid">
+                <!-- Dynamic Testimonials from Sanity -->
+                <div class="testimonial-card-skeleton" style="height: 200px; background: rgba(255,255,255,0.02); border-radius: 16px; animation: pulse 1.5s infinite;"></div>
+                <div class="testimonial-card-skeleton" style="height: 200px; background: rgba(255,255,255,0.02); border-radius: 16px; animation: pulse 1.5s infinite;"></div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faqs" class="faq-section" style="padding: 5rem 5%; max-width: 800px; margin: 0 auto;">
+            <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+                <h2>Frequently Asked <span class="highlight">Questions</span></h2>
+                <p>Everything you need to know about learning at Udara Creations.</p>
+            </div>
+            <div id="faqContainer" class="faq-accordion" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="course-card-skeleton" style="height: 60px; border-radius: 12px; background: rgba(255,255,255,0.03);"></div>
+                <div class="course-card-skeleton" style="height: 60px; border-radius: 12px; background: rgba(255,255,255,0.03);"></div>
+                <div class="course-card-skeleton" style="height: 60px; border-radius: 12px; background: rgba(255,255,255,0.03);"></div>
             </div>
         </section>
     `,

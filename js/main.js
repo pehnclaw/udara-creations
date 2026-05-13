@@ -190,8 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Sanity CMS Integration for Portfolio
-    const portfolioGrid = document.querySelector('.portfolio-grid');
-    if (portfolioGrid) {
+    const portfolioGrids = document.querySelectorAll('.portfolio-grid');
+    if (portfolioGrids.length > 0) {
         const PROJECT_ID = 'x3rb0ahu';
         const DATASET = 'production';
         // Use CDN API for better reliability
@@ -205,22 +205,37 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(({ result }) => {
                 if (result && result.length > 0) {
-                    portfolioGrid.innerHTML = '';
-                    result.forEach(item => {
-                        const div = document.createElement('div');
-                        div.className = 'portfolio-item';
-                        div.setAttribute('data-category', (item.category || 'other').toLowerCase());
-                        div.setAttribute('data-description', item.description || '');
-                        div.innerHTML = `
-                            <img src="${item.imageUrl}" alt="${item.title}" loading="lazy">
-                            <div class="portfolio-overlay">
-                                <h3>${item.title}</h3>
-                                <p>${item.category}</p>
-                            </div>
-                        `;
-                        portfolioGrid.appendChild(div);
+                    portfolioGrids.forEach(portfolioGrid => {
+                        portfolioGrid.innerHTML = '';
+                        const serviceCategory = portfolioGrid.getAttribute('data-service-category');
+                        
+                        let count = 0;
+                        result.forEach(item => {
+                            const itemCategory = (item.category || 'other').toLowerCase();
+                            
+                            // If it's a specific service page, only show that category and limit to 3
+                            if (serviceCategory && itemCategory !== serviceCategory) return;
+                            if (serviceCategory && count >= 3) return;
+                            
+                            if (serviceCategory) count++;
+
+                            const div = document.createElement('div');
+                            div.className = 'portfolio-item reveal';
+                            div.setAttribute('data-category', itemCategory);
+                            div.setAttribute('data-description', item.description || '');
+                            div.innerHTML = `
+                                <img src="${item.imageUrl}" alt="${item.title}" loading="lazy">
+                                <div class="portfolio-overlay">
+                                    <h3>${item.title}</h3>
+                                    <p>${item.category}</p>
+                                </div>
+                            `;
+                            portfolioGrid.appendChild(div);
+                            if (typeof revealObserver !== 'undefined') revealObserver.observe(div);
+                        });
                     });
-                    // Re-apply active filter
+                    
+                    // Re-apply active filter (only on main portfolio page)
                     const activeFilter = document.querySelector('.filter-btn.active');
                     if (activeFilter) activeFilter.click();
                 }
@@ -271,10 +286,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Testimonials Carousel
+    // Testimonials Integration
     const track = document.getElementById('testimonialsTrack');
+    const academyGrid = document.getElementById('academyTestimonialsGrid');
     const dotsContainer = document.getElementById('carouselDots');
-    if (track) {
+    
+    if (track || academyGrid) {
         // Try fetching testimonials from Sanity
         const T_QUERY = encodeURIComponent('*[_type == "testimonial"] | order(_createdAt desc) {quote, name, role, initials}');
         const T_URL = `https://x3rb0ahu.apicdn.sanity.io/v2023-01-01/data/query/production?query=${T_QUERY}`;
@@ -283,27 +300,46 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(res => res.json())
             .then(({ result }) => {
                 if (result && result.length > 0) {
-                    track.innerHTML = '';
-                    result.forEach(t => {
-                        const card = document.createElement('div');
-                        card.className = 'testimonial-card';
-                        card.innerHTML = `
-                            <div class="quote-mark">&ldquo;</div>
-                            <p class="testimonial-text">${t.quote}</p>
-                            <div class="testimonial-author">
-                                <div class="author-avatar">${t.initials || t.name[0]}</div>
-                                <div class="author-info">
+                    if (track) track.innerHTML = '';
+                    if (academyGrid) academyGrid.innerHTML = '';
+                    
+                    const colors = ['var(--accent-cyan)', 'var(--accent-gold)', 'var(--accent-purple)', 'var(--accent-orange)'];
+                    
+                    result.forEach((t, index) => {
+                        const avatarColor = colors[index % colors.length];
+                        const htmlContent = `
+                            <div class="quote-mark" style="${academyGrid ? 'display: none;' : ''}">&ldquo;</div>
+                            <p class="${academyGrid ? '' : 'testimonial-text'}">"${t.quote}"</p>
+                            <div class="${academyGrid ? 'student-info' : 'testimonial-author'}" style="${academyGrid ? 'margin-top: 1.5rem; display: flex; align-items: center; gap: 1rem;' : ''}">
+                                <div class="${academyGrid ? 'student-avatar' : 'author-avatar'}" style="${academyGrid ? `background: ${avatarColor}; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;` : ''}">${t.initials || t.name[0]}</div>
+                                <div class="${academyGrid ? 'student-details' : 'author-info'}">
                                     <h4>${t.name}</h4>
                                     <span>${t.role}</span>
                                 </div>
                             </div>
                         `;
-                        track.appendChild(card);
+                        
+                        if (track) {
+                            const card = document.createElement('div');
+                            card.className = 'testimonial-card';
+                            card.innerHTML = htmlContent;
+                            track.appendChild(card);
+                        }
+                        
+                        if (academyGrid) {
+                            const card = document.createElement('div');
+                            card.className = 'testimonial-card reveal';
+                            card.innerHTML = htmlContent;
+                            academyGrid.appendChild(card);
+                            if (typeof revealObserver !== 'undefined') revealObserver.observe(card);
+                        }
                     });
                 }
-                initCarousel();
+                if (track) initCarousel();
             })
-            .catch(() => initCarousel());
+            .catch(() => {
+                if (track) initCarousel();
+            });
     }
 
     function initCarousel() {
@@ -674,4 +710,308 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         window.addEventListener("scroll", updateActiveNav);
     }
+    
+    // ==========================================
+    // BLOG / INSIGHTS ENGINE
+    // ==========================================
+    const blogGrid = document.getElementById('blogGrid');
+    const postContainer = document.getElementById('postBody');
+    
+    // Helper to parse basic PortableText
+    function parsePortableText(blocks) {
+        if (!blocks || !Array.isArray(blocks)) return '';
+        return blocks.map(block => {
+            if (block._type === 'image') {
+                const imgRef = block.asset?._ref;
+                if (!imgRef) return '';
+                const parts = imgRef.split('-');
+                const url = `https://cdn.sanity.io/images/x3rb0ahu/production/${parts[1]}-${parts[2]}.${parts[3]}`;
+                return `<img src="${url}" alt="Blog Image" style="width:100%; border-radius:12px; margin: 2rem 0;">`;
+            }
+            if (block._type !== 'block' || !block.children) return '';
+            const text = block.children.map(child => {
+                let content = child.text;
+                if (child.marks && child.marks.includes('strong')) content = `<strong>${content}</strong>`;
+                if (child.marks && child.marks.includes('em')) content = `<em>${content}</em>`;
+                return content;
+            }).join('');
+            
+            switch(block.style) {
+                case 'h1': return `<h1 style="margin-top: 2rem;">${text}</h1>`;
+                case 'h2': return `<h2 style="margin-top: 2rem;">${text}</h2>`;
+                case 'h3': return `<h3 style="margin-top: 1.5rem;">${text}</h3>`;
+                case 'blockquote': return `<blockquote style="border-left: 4px solid var(--primary); padding-left: 1rem; margin: 1.5rem 0; font-style: italic;">${text}</blockquote>`;
+                default: return `<p style="margin-bottom: 1.5rem;">${text}</p>`;
+            }
+        }).join('');
+    }
+
+    // Helper to get Image URL
+    function getSanityImageUrl(source) {
+        if (!source || !source.asset || !source.asset._ref) return '';
+        const ref = source.asset._ref;
+        const parts = ref.split('-');
+        return `https://cdn.sanity.io/images/x3rb0ahu/production/${parts[1]}-${parts[2]}.${parts[3]}?w=800&h=500&fit=crop`;
+    }
+
+    if (blogGrid) {
+        // Fetch Blog Grid
+        const QUERY = encodeURIComponent('*[_type == "post"] | order(publishedAt desc) {title, slug, excerpt, mainImage, publishedAt, categories, "authorName": author->name}');
+        const URL = `https://x3rb0ahu.apicdn.sanity.io/v2023-01-01/data/query/production?query=${QUERY}`;
+        
+        fetch(URL)
+            .then(res => res.json())
+            .then(({ result }) => {
+                blogGrid.innerHTML = '';
+                if (result && result.length > 0) {
+                    result.forEach(post => {
+                        const date = new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                        const cat = post.categories && post.categories.length > 0 ? post.categories[0] : 'Insight';
+                        const card = document.createElement('div');
+                        card.className = 'course-card reveal';
+                        card.setAttribute('data-category', cat.toLowerCase());
+                        
+                        card.innerHTML = `
+                            ${post.mainImage ? `<img src="${getSanityImageUrl(post.mainImage)}" alt="${post.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem;">` : ''}
+                            <div class="course-meta">
+                                <span class="meta-tag">${cat.toUpperCase()}</span>
+                                <span class="meta-tag" style="background: transparent; border: none; padding: 0;">${date}</span>
+                            </div>
+                            <h3>${post.title}</h3>
+                            <p>${post.excerpt || 'Read more about our latest insights and industry updates.'}</p>
+                            <a href="post.html?slug=${post.slug.current}" class="btn-secondary" style="margin-top: auto; display: inline-flex;">Read Post <i class="ph ph-arrow-right"></i></a>
+                        `;
+                        blogGrid.appendChild(card);
+                        if (typeof revealObserver !== 'undefined') revealObserver.observe(card);
+                    });
+                    
+                    // Setup Blog Filtering
+                    const filterBtns = document.querySelectorAll('.blog-filters .filter-btn');
+                    filterBtns.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            filterBtns.forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            const filterValue = btn.getAttribute('data-filter');
+                            const posts = blogGrid.querySelectorAll('.course-card');
+                            
+                            posts.forEach(post => {
+                                if (filterValue === 'all' || post.getAttribute('data-category').includes(filterValue)) {
+                                    post.style.display = 'flex';
+                                } else {
+                                    post.style.display = 'none';
+                                }
+                            });
+                        });
+                    });
+                } else {
+                    blogGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No insights published yet. Check back soon!</p>';
+                }
+            })
+            .catch(err => console.error('Blog fetch error:', err));
+    }
+
+    if (postContainer) {
+        // Fetch Single Post
+        const urlParams = new URLSearchParams(window.location.search);
+        const slug = urlParams.get('slug');
+        
+        if (slug) {
+            const QUERY = encodeURIComponent(`*[_type == "post" && slug.current == "${slug}"][0]{
+                title, publishedAt, categories, mainImage, body, 
+                "authorName": author->name, 
+                "authorRole": author->role,
+                "authorImage": author->image
+            }`);
+            const URL = `https://x3rb0ahu.apicdn.sanity.io/v2023-01-01/data/query/production?query=${QUERY}`;
+            
+            fetch(URL)
+                .then(res => res.json())
+                .then(({ result }) => {
+                    if (result) {
+                        document.title = `${result.title} | Udara Insights`;
+                        document.getElementById('postTitle').textContent = result.title;
+                        
+                        const date = new Date(result.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                        document.getElementById('postDate').textContent = date;
+                        
+                        if (result.categories && result.categories.length > 0) {
+                            document.getElementById('postCategory').textContent = result.categories[0].toUpperCase();
+                        } else {
+                            document.getElementById('postCategory').style.display = 'none';
+                        }
+                        
+                        if (result.authorName) {
+                            document.getElementById('postAuthorName').textContent = result.authorName;
+                            document.getElementById('postAuthorRole').textContent = result.authorRole || 'Udara Creations';
+                            if (result.authorImage) {
+                                const avatarBg = `url(${getSanityImageUrl(result.authorImage)}) center/cover`;
+                                document.getElementById('postAuthorAvatar').style.background = avatarBg;
+                            } else {
+                                document.getElementById('postAuthorAvatar').textContent = result.authorName[0];
+                                document.getElementById('postAuthorAvatar').style.display = 'flex';
+                                document.getElementById('postAuthorAvatar').style.alignItems = 'center';
+                                document.getElementById('postAuthorAvatar').style.justifyContent = 'center';
+                                document.getElementById('postAuthorAvatar').style.fontWeight = 'bold';
+                            }
+                        } else {
+                            document.getElementById('postAuthor').style.display = 'none';
+                        }
+                        
+                        if (result.mainImage) {
+                            const imgEl = document.getElementById('postImage');
+                            imgEl.src = getSanityImageUrl(result.mainImage).replace('w=800&h=500', 'w=1200'); // Larger for hero
+                            imgEl.style.display = 'block';
+                        }
+                        
+                        postContainer.innerHTML = parsePortableText(result.body);
+                    } else {
+                        document.getElementById('postTitle').textContent = 'Post Not Found';
+                        postContainer.innerHTML = '<p>The requested insight could not be found or has been removed.</p>';
+                    }
+                })
+                .catch(err => console.error('Post fetch error:', err));
+        } else {
+            document.getElementById('postTitle').textContent = 'Invalid Post';
+            postContainer.innerHTML = '<p>No post identifier provided.</p>';
+        }
+    }
+
+    // ==========================================
+    // ADVANCED FORM HANDLING
+    // ==========================================
+    const contactForm = document.getElementById('contactForm');
+    const successModal = document.getElementById('successModal');
+    const formSubmitBtn = document.getElementById('formSubmitBtn');
+
+    if (contactForm && successModal) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            const originalBtnText = formSubmitBtn.textContent;
+            formSubmitBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Sending...';
+            formSubmitBtn.disabled = true;
+
+            const formData = new FormData(contactForm);
+            
+            // Append subject based on page context or newsletter
+            const isNewsletter = formData.get('newsletter') === 'on';
+            if (isNewsletter) {
+                formData.append('subject', 'New Lead + Newsletter Subscription');
+            } else {
+                formData.append('subject', 'New Inquiry from Website');
+            }
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            })
+            .then(async (response) => {
+                let json = await response.json();
+                if (response.status == 200) {
+                    successModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    contactForm.reset();
+                } else {
+                    console.log(response);
+                    alert(json.message || "Something went wrong.");
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                alert("Something went wrong!");
+            })
+            .finally(() => {
+                formSubmitBtn.innerHTML = originalBtnText;
+                formSubmitBtn.disabled = false;
+            });
+        });
+
+        const closeSuccessBtn = successModal.querySelector('.close-modal-btn');
+        const closeIcon = successModal.querySelector('.close-modal');
+
+        const closeSuccess = () => {
+            successModal.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        if (closeSuccessBtn) closeSuccessBtn.addEventListener('click', closeSuccess);
+        if (closeIcon) closeIcon.addEventListener('click', closeSuccess);
+        window.addEventListener('click', (e) => {
+            if (e.target === successModal) closeSuccess();
+        });
+    // ==========================================
+    // ACADEMY FAQ ENGINE
+    // ==========================================
+    const faqContainer = document.getElementById('faqContainer');
+    
+    if (faqContainer) {
+        const QUERY = encodeURIComponent('*[_type == "faq"] | order(order asc, question asc) {question, answer, category}');
+        const URL = `https://x3rb0ahu.apicdn.sanity.io/v2023-01-01/data/query/production?query=${QUERY}`;
+        
+        fetch(URL)
+            .then(res => res.json())
+            .then(({ result }) => {
+                faqContainer.innerHTML = '';
+                if (result && result.length > 0) {
+                    result.forEach(faq => {
+                        const item = document.createElement('div');
+                        item.className = 'faq-item reveal';
+                        item.style.background = 'rgba(255, 255, 255, 0.03)';
+                        item.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+                        item.style.borderRadius = '12px';
+                        item.style.overflow = 'hidden';
+                        
+                        item.innerHTML = `
+                            <button class="faq-question" style="width: 100%; text-align: left; padding: 1.5rem; background: transparent; border: none; color: white; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-heading);">
+                                ${faq.question}
+                                <i class="ph ph-plus" style="color: var(--primary); transition: transform 0.3s ease;"></i>
+                            </button>
+                            <div class="faq-answer" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease;">
+                                <p style="padding: 0 1.5rem 1.5rem 1.5rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">${faq.answer}</p>
+                            </div>
+                        `;
+                        faqContainer.appendChild(item);
+                        if (typeof revealObserver !== 'undefined') revealObserver.observe(item);
+                    });
+                    
+                    // Setup FAQ Interaction
+                    const faqItems = document.querySelectorAll('.faq-item');
+                    faqItems.forEach(item => {
+                        const btn = item.querySelector('.faq-question');
+                        const answer = item.querySelector('.faq-answer');
+                        const icon = item.querySelector('.ph-plus');
+                        
+                        btn.addEventListener('click', () => {
+                            const isOpen = item.classList.contains('active');
+                            
+                            // Close all others
+                            faqItems.forEach(otherItem => {
+                                otherItem.classList.remove('active');
+                                const otherAnswer = otherItem.querySelector('.faq-answer');
+                                const otherIcon = otherItem.querySelector('i');
+                                otherAnswer.style.maxHeight = '0';
+                                if(otherIcon) {
+                                    otherIcon.classList.remove('ph-minus');
+                                    otherIcon.classList.add('ph-plus');
+                                    otherIcon.style.transform = 'rotate(0)';
+                                }
+                            });
+                            
+                            if (!isOpen) {
+                                item.classList.add('active');
+                                answer.style.maxHeight = answer.scrollHeight + 30 + 'px'; // + padding
+                                icon.classList.remove('ph-plus');
+                                icon.classList.add('ph-minus');
+                                icon.style.transform = 'rotate(180deg)';
+                            }
+                        });
+                    });
+                } else {
+                    faqContainer.innerHTML = '<p style="text-align: center;">FAQs will be updated soon.</p>';
+                }
+            })
+            .catch(err => console.error('FAQ fetch error:', err));
+    }
+
 });
