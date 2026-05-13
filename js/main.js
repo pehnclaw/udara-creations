@@ -380,54 +380,6 @@ document.addEventListener('DOMContentLoaded', () => {
         startAuto();
     }
 
-    // Contact Form Logic
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const btn = contactForm.querySelector('button');
-            const originalText = btn.textContent;
-            
-            btn.textContent = 'Sending...';
-            btn.style.opacity = '0.8';
-            
-            const formData = new FormData(contactForm);
-            
-            fetch("https://api.web3forms.com/submit", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    btn.textContent = 'Message Sent Successfully!';
-                    btn.style.backgroundColor = 'var(--accent-green)';
-                    btn.style.color = '#000';
-                    btn.style.opacity = '1';
-                    contactForm.reset();
-                } else {
-                    btn.textContent = data.message || 'Error Sending!';
-                    btn.style.backgroundColor = 'var(--accent-orange)';
-                    btn.style.opacity = '1';
-                }
-                
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.backgroundColor = '';
-                    btn.style.color = '';
-                }, 4000);
-            })
-            .catch(error => {
-                btn.textContent = 'Error Sending!';
-                btn.style.backgroundColor = 'var(--accent-magenta)';
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.backgroundColor = '';
-                }, 4000);
-            });
-        });
-    }
-
     // 3D Tilt Effect for Service Cards
     const cards = document.querySelectorAll('.service-card');
     cards.forEach(card => {
@@ -455,23 +407,6 @@ document.addEventListener('DOMContentLoaded', () => {
         card.addEventListener('mouseleave', () => {
             card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
         });
-    });
-
-    // FAQ Accordion Logic
-    const faqItems = document.querySelectorAll('.faq-item');
-    faqItems.forEach(item => {
-        const question = item.querySelector('.faq-question');
-        if (question) {
-            question.addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
-                // Close all other items
-                faqItems.forEach(i => i.classList.remove('active'));
-                // Toggle current item
-                if (!isActive) {
-                    item.classList.add('active');
-                }
-            });
-        }
     });
 
     // Sanity CMS Integration for Team (About Page)
@@ -879,20 +814,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // ADVANCED FORM HANDLING
     // ==========================================
-    const contactForm = document.getElementById('contactForm');
-    const successModal = document.getElementById('successModal');
-    const formSubmitBtn = document.getElementById('formSubmitBtn');
+    const mainContactForm = document.getElementById('contactForm');
+    const mainSuccessModal = document.getElementById('successModal');
+    const mainFormSubmitBtn = document.getElementById('formSubmitBtn');
 
-    if (contactForm && successModal) {
-        contactForm.addEventListener('submit', function(e) {
+    if (mainContactForm && mainSuccessModal) {
+        mainContactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
             // Show loading state
-            const originalBtnText = formSubmitBtn.textContent;
-            formSubmitBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Sending...';
-            formSubmitBtn.disabled = true;
+            const originalBtnText = mainFormSubmitBtn.textContent;
+            mainFormSubmitBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Sending...';
+            mainFormSubmitBtn.disabled = true;
 
-            const formData = new FormData(contactForm);
+            const formData = new FormData(mainContactForm);
             
             // Append subject based on page context or newsletter
             const isNewsletter = formData.get('newsletter') === 'on';
@@ -909,9 +844,9 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(async (response) => {
                 let json = await response.json();
                 if (response.status == 200) {
-                    successModal.classList.add('active');
+                    mainSuccessModal.classList.add('active');
                     document.body.style.overflow = 'hidden';
-                    contactForm.reset();
+                    mainContactForm.reset();
                 } else {
                     console.log(response);
                     alert(json.message || "Something went wrong.");
@@ -922,24 +857,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Something went wrong!");
             })
             .finally(() => {
-                formSubmitBtn.innerHTML = originalBtnText;
-                formSubmitBtn.disabled = false;
+                mainFormSubmitBtn.innerHTML = originalBtnText;
+                mainFormSubmitBtn.disabled = false;
             });
         });
 
-        const closeSuccessBtn = successModal.querySelector('.close-modal-btn');
-        const closeIcon = successModal.querySelector('.close-modal');
+        const closeSuccessBtn = mainSuccessModal.querySelector('.close-modal-btn');
+        const closeIcon = mainSuccessModal.querySelector('.close-modal');
 
         const closeSuccess = () => {
-            successModal.classList.remove('active');
+            mainSuccessModal.classList.remove('active');
             document.body.style.overflow = '';
         };
 
         if (closeSuccessBtn) closeSuccessBtn.addEventListener('click', closeSuccess);
         if (closeIcon) closeIcon.addEventListener('click', closeSuccess);
         window.addEventListener('click', (e) => {
-            if (e.target === successModal) closeSuccess();
+            if (e.target === mainSuccessModal) closeSuccess();
         });
+    }
+
     // ==========================================
     // ACADEMY FAQ ENGINE
     // ==========================================
